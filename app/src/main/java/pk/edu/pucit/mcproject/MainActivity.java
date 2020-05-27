@@ -1,7 +1,10 @@
 package pk.edu.pucit.mcproject;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
 import android.view.Menu;
@@ -10,41 +13,52 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    ArrayAdapter<String> arrayAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ListView listView = findViewById(R.id.list);
-        String [] items = {"Bagshahi Mosque","Minar-e-Pakistan","Shahi Qala","Behria Grand Mosque","Anarkli","Masjid wazir khan","Mochi gate"};
-        arrayAdapter = new ArrayAdapter<>(this,android.R.layout.simple_list_item_1 , items);
-        listView.setAdapter(arrayAdapter);
+        BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
+        bottomNav.setOnNavigationItemSelectedListener(navListener);
+        //I added this if statement to keep the selected fragment when rotating the device
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                    new HomeFragment()).commit();
+        }
+
+
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.my_menu, menu);
-        MenuItem menuItem = menu.findItem(R.id.search_icon);
-        SearchView searchView = (SearchView) menuItem.getActionView();
-        searchView.setQueryHint("Search Place here");
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
+    private BottomNavigationView.OnNavigationItemSelectedListener navListener =
+            new BottomNavigationView.OnNavigationItemSelectedListener() {
+                @Override
+                public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                arrayAdapter.getFilter().filter(newText);
-                return true ;
-            }
-        });
-        return super.onCreateOptionsMenu(menu);
+                    switch (item.getItemId()) {
+                        case R.id.nav_home:
+                            loadFragment(new HomeFragment());
+                            break;
+                        case R.id.nav_contibute:
+                            loadFragment(new ContributeFragment());
+                            break;
+                    }
+                    return true;
+                }
+            };
 
+    private void loadFragment(Fragment fragment) {
+        // load fragment
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.fragment_container, fragment);
+        //transaction.addToBackStack(null);
+        transaction.commit();
     }
 }
+

@@ -15,24 +15,33 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class HomeFragment extends Fragment {
     private ArrayAdapter<String> arrayAdapter;
-    private String [] items = {"Badshahi Mosque","Minar-e-Pakistan","Shahi Qala","Behria Grand Mosque","Anarkli","Masjid wazir khan","Mochi gate"};
+    private String [] items = {"Badshahi Mosque","Minar-e-Pakistan","Shahi Qala","Behria Grand Mosque","Anarkli","Masjid wazir khan","Mochi gate","Hunza vali","Naran", "Lahore Food-Street"};
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_home, container, false);
-        ListView listView = view.findViewById(R.id.list);
+        RecyclerView recyclerView = view.findViewById(R.id.rv);
+        recyclerView.setLayoutManager(new GridLayoutManager(getContext() , 3));
+
+        HomeRVAdapter homeRVAdapter = new HomeRVAdapter(getContext(),items);
+        recyclerView.setAdapter(homeRVAdapter);
+
+    /*  ListView listView = view.findViewById(R.id.list);
         arrayAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1 , items);
-        listView.setAdapter(arrayAdapter);
+        listView.setAdapter(arrayAdapter);*/
 
         return view;
     }
 
-    @Override
+
+   /* @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
@@ -67,5 +76,5 @@ public class HomeFragment extends Fragment {
             return true;
         }
         return super.onOptionsItemSelected(item);
-    }
+    }*/
 }

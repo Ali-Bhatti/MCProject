@@ -3,4 +3,6 @@
     <string name="search">Search</string>
     <string name="home">Home</string>
     <string name="contribute">Contribute</string>
+    <string name="category">Category</string>
+    <string name="famous_places">Famous Places</string>
 </resources>

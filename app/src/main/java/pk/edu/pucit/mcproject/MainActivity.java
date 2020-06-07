@@ -54,20 +54,43 @@ public class MainActivity extends AppCompatActivity {
             };
 
     private void loadFragment(Fragment fragment) {
-        // load fragment
+      /*  // load fragment
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.replace(R.id.fragment_container, fragment);
         //transaction.addToBackStack(null);
-        transaction.commit();
+        transaction.commit();*/
+        String backStateName =  fragment.getClass().getName();
+
+        FragmentManager manager = getSupportFragmentManager();
+        boolean fragmentPopped = manager.popBackStackImmediate(backStateName,0);
+
+        if (!fragmentPopped && manager.findFragmentByTag(backStateName) == null){ //fragment not in back stack, create it.
+            FragmentTransaction ft = manager.beginTransaction();
+            ft.replace(R.id.fragment_container, fragment, backStateName);
+            ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+            ft.addToBackStack(backStateName);
+            ft.commit();
+        }
     }
 
     @Override
     public void onBackPressed() {
-        if (bottomNav.getSelectedItemId() == R.id.nav_home) {
-            super.onBackPressed();
+        /*if (bottomNav.getSelectedItemId() == R.id.nav_home) {
+            String backStateName = HomeFragment.class.getName();
+            String fragmentTag = backStateName;
+
+            FragmentManager manager = getSupportFragmentManager();
+            manager.popBackStack(backStateName,0);
+            //super.onBackPressed();
         } else {
             bottomNav.setSelectedItemId(R.id.nav_home);
+        }*/
+        if (getSupportFragmentManager().getBackStackEntryCount() == 1){
+            finish();
+        }
+        else {
+            super.onBackPressed();
         }
     }
 }

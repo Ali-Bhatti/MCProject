@@ -1,4 +1,11 @@
 <resources>
     <string name="app_name">MC Project</string>
     <string name="about_this_place">About This place:</string>
+    <string name="app_name">Pakistan Tour Guide</string>
+    <string name="search">Search</string>
+    <string name="home">Home</string>
+    <string name="contribute">Contribute</string>
+    <string name="category">Category</string>
+    <string name="famous_places">Famous Places</string>
+    <string name="profile">Profile</string>
 </resources>

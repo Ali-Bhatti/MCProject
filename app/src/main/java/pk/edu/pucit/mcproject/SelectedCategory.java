@@ -1,29 +1,47 @@
 package pk.edu.pucit.mcproject;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Toast;
 
 import java.util.Objects;
 
 public class SelectedCategory extends AppCompatActivity {
 
-    private String[] categorys = {"Famous Cities", "Valleys", "Sea View", "Desert", "Historical Places"};
+    private String[] categorys = {"Famous Cities", "Valleys", "Sea View","Historical Places" , "Desert"};
     private String[][] details = {{"Karachi", "Lahore", "Faisalabad", "Multan", "Hyderabad", "Gujranwala", "Peshawar", "Quetta", "Islamabad"},
             {"Shigar Valley", "Gilgit Valley", "Hunza Valley", "Nagar Valley", "Skardu Valley", "Rupal Valley", "Yasin Valley", "Naltar Valley", "Bagrot Valley", "Chiporsun Valley"},
             {"Karachi SeaView", "Balochistan SeaView"},
-            {"Kharan Desert", "Thar Desert", "Cholistan Desert", "Cold Desert, Skardu"},
-            {"Begum Shahi Mosque", "Mohenjo-Daro", "Rohtas Fort", "Taxila", "Wazir Khan Mosque", "Katasraj Temples", "Lahore Fort", "Kot Diji", "Takht-i-Bhai", "Hiran Minar", "Ranikot Fort", "Nagarparkar Jain Temples", "Tomb of Jahangir"}};
+            {"Begum Shahi Mosque", "Mohenjo-Daro", "Rohtas Fort", "Taxila", "Wazir Khan Mosque", "Katasraj Temples", "Lahore Fort", "Kot Diji", "Takht-i-Bhai", "Hiran Minar", "Ranikot Fort", "Nagarparkar Jain Temples", "Tomb of Jahangir"},
+            {"Kharan Desert", "Thar Desert", "Cholistan Desert", "Cold Desert, Skardu"}
+            };
     private int position;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_selected_category);
-        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+        //setting your ow toolbar
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        //Setting back button
+        toolbar.setNavigationIcon(R.drawable.ic_back_arrow); // Set the icon
+
+        // Icon click listener
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         //to get value passed to activity
@@ -44,7 +62,13 @@ public class SelectedCategory extends AppCompatActivity {
             @Override
             public void onItemClick(int position) {
                 //here corresponding activity will be opened
-                makeToast(details[pos][position], true);
+                if(pos == 0) {
+                    makeToast(details[pos][position], true);
+                }else{
+                    Intent intent = new Intent(getApplicationContext(),PlaceDetailActivity.class);
+                    intent.putExtra("AppBarTitle",details[pos][position]);
+                    startActivity(intent);
+                }
             }
         });
 

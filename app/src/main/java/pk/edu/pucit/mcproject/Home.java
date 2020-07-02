@@ -20,11 +20,9 @@ public class Home extends Fragment {
     //private String[] categorys = {"Capitals", "Food", "Mountain Areas", "Sea View", "Desert", "Cultural Places", "Ancient Places"};
     private String[] categorys = {"Famous Cities", "Valleys", "Sea View", "Historical Places" , "Desert"};
 
-
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(final LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         // First Recycler View
@@ -57,7 +55,9 @@ public class Home extends Fragment {
             @Override
             public void onItemClick(int position) {
                 //here corresponding activity will be opened
-                makeToast(famousPlaces[position], true);
+                Intent intent = new Intent(getContext() , PlaceDetailActivity.class);
+                intent.putExtra("AppBarTitle" , famousPlaces[position]);
+                startActivity(intent);
             }
         });
 

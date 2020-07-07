@@ -63,7 +63,10 @@ public class SelectedCategory extends AppCompatActivity {
             public void onItemClick(int position) {
                 //here corresponding activity will be opened
                 if(pos == 0) {
-                    makeToast(details[pos][position], true);
+                    Intent intent = new Intent(getApplicationContext(),City_details.class);
+                    intent.putExtra("AppBarTitle",details[pos][position]);
+                    startActivity(intent);
+                    //makeToast(details[pos][position], true);
                 }else{
                     Intent intent = new Intent(getApplicationContext(),PlaceDetailActivity.class);
                     intent.putExtra("AppBarTitle",details[pos][position]);

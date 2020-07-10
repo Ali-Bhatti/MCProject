@@ -7,4 +7,10 @@
     <string name="category">Category</string>
     <string name="famous_places">Famous Places</string>
     <string name="profile">Profile</string>
+    <array name="category_array">
+        <item>Hill station</item>
+        <item>sea view</item>
+        <item>ancient places</item>
+        <item>citiese</item>
+    </array>
 </resources>

@@ -47,7 +47,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="2dp"
-                android:text="@string/about_this_place"
+                android:text="@string/about_this_city"
                 android:textColor="@color/design_default_color_on_secondary"
                 android:textSize="8pt"
                 android:textStyle="bold"
@@ -69,7 +69,7 @@
 
 
             <ImageButton
-                android:id="@+id/imageButton"
+                android:id="@+id/imgBtnDirection"
                 android:layout_width="120dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
@@ -77,10 +77,29 @@
                 android:layout_marginBottom="10dp"
                 android:backgroundTint="#067FDF"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/imgBtnResturant"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView"
                 app:layout_constraintVertical_bias="0.0"
+                android:onClick="openGoogleMap"
                 app:srcCompat="@android:drawable/ic_menu_directions" />
+
+            <ImageButton
+                android:id="@+id/imgBtnResturant"
+                android:layout_width="59dp"
+                android:layout_height="59dp"
+                android:layout_marginEnd="56dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/resturant_logo"
+                android:contentDescription="@string/see_nearby_restaurants"
+                android:elevation="8dp"
+                android:onClick="openGoogleMap"
+                app:layout_constraintBottom_toTopOf="@id/txtFamousPlaces"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.837"
+                app:layout_constraintStart_toEndOf="@id/imgBtnDirection"
+                app:layout_constraintTop_toBottomOf="@+id/textView"
+                app:layout_constraintVertical_bias="1.0" />
 
             <TextView
                 android:id="@+id/txtFamousPlaces"
@@ -93,7 +112,7 @@
                 android:textSize="8pt"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/imageButton" />
+                app:layout_constraintTop_toBottomOf="@id/imgBtnDirection" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_vertical1"
@@ -107,6 +126,9 @@
                 app:layout_constraintTop_toBottomOf="@id/txtFamousPlaces"
                 app:layout_constraintVertical_bias="0.0"
                 android:background="@color/bgcolor"/>
+
+
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>

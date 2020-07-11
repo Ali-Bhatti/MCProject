@@ -9,14 +9,16 @@
     <!-- TODO: Update blank fragment layout -->
 
 
+
     <EditText
-        android:id="@+id/editTextTextPersonName"
+        android:id="@+id/Place_Name"
         android:layout_width="206dp"
         android:layout_height="47dp"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="60dp"
         android:editable="true"
         android:ems="10"
+        android:hint="Enter Place Name"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -28,7 +30,7 @@
         android:layout_marginTop="52dp"
         android:text="Place Name"
         android:textStyle="bold"
-        app:layout_constraintEnd_toStartOf="@+id/editTextTextPersonName"
+        app:layout_constraintEnd_toStartOf="@+id/Place_Name"
         app:layout_constraintHorizontal_bias="0.59"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -39,10 +41,11 @@
         android:layout_height="30dp"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="60dp"
-        android:background="@color/colorPrimaryDark"
+        android:autofillHints="category"
+        android:background="@color/cardview_light_background"
         app:layout_constraintEnd_toEndOf="parent"
         style="@style/TextAppearance.AppCompat.Widget.DropDownItem"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName" />
+        app:layout_constraintTop_toBottomOf="@+id/Place_Name" />
 
 
     <TextView
@@ -56,22 +59,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtPlaceName" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        app:layout_constraintTop_toBottomOf="@+id/txtWriteSomething"
-        tools:layout_editor_absoluteX="0dp" />
 
-    <EditText
-        android:id="@+id/txtWriteSomething"
-        android:layout_width="340dp"
-        android:layout_height="39dp"
-        android:layout_marginTop="50dp"
-        android:editable="true"
-        android:text="write something"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinner" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

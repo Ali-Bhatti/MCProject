@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/bottom_nav"
-    app:startDestination="@id/home2">
+    app:startDestination="@id/Add_image">
     <fragment
         android:id="@+id/home2"
         android:name="pk.edu.pucit.mcproject.Home"
@@ -19,4 +19,9 @@
         android:name="pk.edu.pucit.mcproject.Profile"
         android:label="@string/profile"
         tools:layout="@layout/fragment_profile" />
+    <fragment
+        android:id="@+id/Add_image"
+        android:name="pk.edu.pucit.mcproject.Add_Image_Fragment"
+        android:label="AddImage"
+        tools:layout="@layout/fragment_add__image_" />
 </navigation>

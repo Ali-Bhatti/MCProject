@@ -109,7 +109,7 @@ public class Add_Video extends Fragment {
         mButtonShowUploads.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), Show_Uploaded_Images.class);
+                Intent intent = new Intent(getActivity(), show_uploaded_videos.class);
                 startActivity(intent);
             }
         });

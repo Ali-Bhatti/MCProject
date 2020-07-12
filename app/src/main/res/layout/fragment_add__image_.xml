@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".Add_Image_Fragment">
 
-    i<androidx.core.widget.NestedScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -100,10 +100,10 @@
             android:layout_marginTop="12dp"
             android:background="@color/colorPrimaryDark"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btn_Browse_Image" />
+            app:layout_constraintTop_toBottomOf="@+id/btn_Browse_Video" />
 
         <Button
-            android:id="@+id/btn_Browse_Image"
+            android:id="@+id/btn_Browse_Video"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="28dp"

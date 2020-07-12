@@ -2,6 +2,7 @@ package pk.edu.pucit.mcproject;
 
 import android.content.ContentResolver;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -17,9 +18,11 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.MediaController;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
+import android.widget.VideoView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -36,40 +39,37 @@ import com.squareup.picasso.Picasso;
 
 import static android.app.Activity.RESULT_OK;
 
-public class Add_Image_Fragment extends Fragment {
+public class Add_Video extends Fragment {
 
 
-    private static final int PICK_IMAGE_REQUEST = 1;
-    private Button mButtonChooseImage;
+    private static final int PICK_Video_REQUEST = 1;
+    private Button mButtonChooseVideo;
     private Button mButtonUpload;
     private Button mButtonShowUploads;
     private String category;
     private String UserNAme = "Usman";
     private String UserEmail = "Usman@gmail.com";
     private EditText PlaceName;
-    private ImageView mImageView;
+    private VideoView mVideoView;
     private ProgressBar mProgressBar;
-    private Uri Image_uri;
+    private Uri Video_uri;
     private EditText aboutPlace;
-
 
     private StorageReference mStorageRef;
     private DatabaseReference mDatabaseRef;
     private StorageTask mUploadTask;
 
+    public  Add_Video()
+    {
 
-    public Add_Image_Fragment() {
-        // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_add__image_, container, false);
-
-        //spinner
+        View view= inflater.inflate(R.layout.fragment_add__video, container, false);
+//spinner
         Spinner Spinner = view.findViewById(R.id.spinner);
 
 
@@ -85,20 +85,21 @@ public class Add_Image_Fragment extends Fragment {
         // Apply the adapter to the spinner
         Spinner.setAdapter(staticAdapter);
 
-        mButtonChooseImage = view.findViewById(R.id.btn_Browse_Video);
+        mButtonChooseVideo = view.findViewById(R.id.btn_Browse_Video);
         mButtonUpload = view.findViewById(R.id.btn_Upload);
         PlaceName = view.findViewById(R.id.Place_Name);
-        mImageView = view.findViewById(R.id.imageView);
+        mVideoView = view.findViewById(R.id.VideoView);
         mProgressBar = view.findViewById(R.id.progressBar);
         aboutPlace = view.findViewById(R.id.txtWriteSomething);
         mButtonShowUploads = view.findViewById(R.id.btn_show_uploads);
         category = Spinner.getSelectedItem().toString();
+       // mVideoView.setVisibility(View.VISIBLE);
 
-        mStorageRef = FirebaseStorage.getInstance().getReference("Images");
-        mDatabaseRef = FirebaseDatabase.getInstance().getReference("Images");
+        mStorageRef = FirebaseStorage.getInstance().getReference("Videos");
+        mDatabaseRef = FirebaseDatabase.getInstance().getReference("Videos");
 
 
-        mButtonChooseImage.setOnClickListener(new View.OnClickListener() {
+        mButtonChooseVideo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 openFileChooser();
@@ -113,7 +114,6 @@ public class Add_Image_Fragment extends Fragment {
             }
         });
 
-
         mButtonUpload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -127,25 +127,33 @@ public class Add_Image_Fragment extends Fragment {
             }
         });
 
-
         return view;
     }
 
-
     private void openFileChooser() {
         Intent intent = new Intent();
-        intent.setType("image/*");
+        intent.setType("video/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(intent, PICK_IMAGE_REQUEST);
+        startActivityForResult(intent, PICK_Video_REQUEST);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK
+        if (requestCode == PICK_Video_REQUEST && resultCode == RESULT_OK
                 && data != null && data.getData() != null) {
-            Image_uri = data.getData();
-            Picasso.get().load(Image_uri).into(mImageView);
+            Video_uri = data.getData();
+            //mVideoView.requestFocus();
+           mVideoView.setVideoURI(Video_uri);
+            //mVideoView.setBackgroundColor(Color.TRANSPARENT);
+
+           // MediaController mediaController=new MediaController(getContext());
+           // mVideoView.setMediaController(mediaController);
+          //  mediaController.setAnchorView(mVideoView);
+            mVideoView.setMediaController(new MediaController(getContext()));
+           // mVideoView.setZOrderOnTop(true);
+            mVideoView.start();
+
         }
     }
 
@@ -156,11 +164,12 @@ public class Add_Image_Fragment extends Fragment {
     }
 
 
+
     private void uploadFile() {
-        if (Image_uri != null) {
+        if (Video_uri != null) {
             StorageReference fileReference = mStorageRef.child(System.currentTimeMillis()
-                    + "." + getFileExtension(Image_uri));
-            mUploadTask = fileReference.putFile(Image_uri)
+                    + "." + getFileExtension(Video_uri));
+            mUploadTask = fileReference.putFile(Video_uri)
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -180,7 +189,7 @@ public class Add_Image_Fragment extends Fragment {
                                             //next work with URL
                                             Toast.makeText(getActivity(), "Upload successful", Toast.LENGTH_LONG).show();
                                             Upload upload = new Upload(PlaceName.getText().toString().trim(),
-                                                  fileLink, category, UserNAme, UserEmail, aboutPlace.getText().toString().trim());
+                                                    fileLink, category, UserNAme, UserEmail, aboutPlace.getText().toString().trim());
 
                                             String uploadId = mDatabaseRef.push().getKey();
                                             mDatabaseRef.child(uploadId).setValue(upload);

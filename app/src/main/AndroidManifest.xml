@@ -10,7 +10,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Show_Uploaded_Images"></activity>
+        <activity android:name=".show_uploaded_videos"></activity>
+        <activity android:name=".Show_Uploaded_Images" />
         <activity
             android:name=".SelectedCategory"
             android:parentActivityName=".MainActivity" />

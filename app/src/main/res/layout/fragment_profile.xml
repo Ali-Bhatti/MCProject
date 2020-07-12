@@ -1,20 +1,126 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".Profile"
-    android:background="@color/yellow">
+    tools:context=".Profile">
 
     <!-- TODO: Update blank fragment layout -->
     <TextView
+        android:id="@+id/textView6"
+        android:layout_width="158dp"
+        android:layout_height="61dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="5dp"
+        android:text="@string/TODO"
+        android:textAlignment="center"
+        android:textColor="@color/colorAccent1"
+        android:textSize="15pt"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.084" />
+
+    <TextView
+        android:id="@+id/profNameBox"
+        android:layout_width="300dp"
+        android:layout_height="55dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="5dp"
+        android:text="@string/name"
+        android:textAlignment="center"
+        android:textColor="@color/colorAccent2"
+        android:textSize="12pt"
+        app:layout_constraintEnd_toEndOf="@+id/textView6"
+        app:layout_constraintStart_toStartOf="@+id/textView6"
+        app:layout_constraintTop_toBottomOf="@+id/textView6" />
+
+    <TextView
+        android:id="@+id/profEmailBox"
+        android:layout_width="300dp"
+        android:layout_height="55dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="5dp"
+        android:text="@string/email"
+        android:textAlignment="center"
+        android:textColor="@color/colorAccent2"
+        android:textSize="12pt"
+        app:layout_constraintEnd_toEndOf="@+id/profNameBox"
+        app:layout_constraintStart_toStartOf="@+id/profNameBox"
+        app:layout_constraintTop_toBottomOf="@+id/profNameBox" />
+
+    <Button
+        android:id="@+id/profLogoutButton"
+        android:layout_width="324dp"
+        android:layout_height="49dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
+        android:background="@drawable/rounder_button"
+        android:text="@string/logout"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/editTextTextPassword"
+        app:layout_constraintStart_toStartOf="@+id/editTextTextPassword"
+        app:layout_constraintTop_toBottomOf="@+id/editTextTextPassword"
+        app:layout_constraintVertical_bias="0.572" />
+
+    <TextView
+        android:id="@+id/editTextTextPassword"
+        android:layout_width="300dp"
+        android:layout_height="55dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="5dp"
+        android:ems="10"
+        android:inputType="textPassword"
+        android:text="@string/password"
+        android:textAlignment="center"
+        android:textColor="@color/colorAccent2"
+        android:textSize="12pt"
+        app:layout_constraintEnd_toEndOf="@+id/profEmailBox"
+        app:layout_constraintStart_toStartOf="@+id/profEmailBox"
+        app:layout_constraintTop_toBottomOf="@+id/profEmailBox" />
+
+    <ImageButton
+        android:id="@+id/profImageBtnPassChange"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:text="@string/profile"
-        android:textSize="14pt"/>
+        android:layout_marginEnd="4dp"
+        android:src="@android:drawable/ic_menu_edit"
+        app:layout_constraintBottom_toBottomOf="@+id/editTextTextPassword"
+        app:layout_constraintEnd_toEndOf="@+id/editTextTextPassword"
+        app:layout_constraintTop_toBottomOf="@+id/profEmailBox"
+        app:layout_constraintVertical_bias="0.666" />
+
+    <EditText
+        android:id="@+id/editTextTextPassword2"
+        android:layout_width="292dp"
+        android:layout_height="52dp"
+        android:layout_marginTop="16dp"
+        android:ems="10"
+        android:inputType="textPassword"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/profLogoutButton"
+        app:layout_constraintEnd_toEndOf="@+id/editTextTextPassword"
+        app:layout_constraintStart_toStartOf="@+id/editTextTextPassword"
+        app:layout_constraintTop_toBottomOf="@+id/editTextTextPassword"
+        app:layout_constraintVertical_bias="0.172" />
+
+    <ImageButton
+        android:id="@+id/confirmChangePassBtn"
+        android:layout_width="57dp"
+        android:layout_height="50dp"
+        android:src="@android:drawable/ic_lock_lock"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/editTextTextPassword2"
+        app:layout_constraintEnd_toEndOf="@+id/editTextTextPassword2"
+        app:layout_constraintTop_toTopOf="@+id/editTextTextPassword2"
+        tools:visibility="invisible" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -16,14 +16,35 @@ public class LogInActivity extends AppCompatActivity {
     DatabaseHelper db;
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        //Check If user is already logged in
+        //if logged in move to main activity
+
+        SessionManagement sessionManagement=new SessionManagement(LogInActivity.this);
+        String useremail=sessionManagement.getSession();
+        if(useremail!=null)
+        {
+            moveToMainActivity();
+        }
+
+    }
+    private void moveToMainActivity(){
+        Intent intent = new Intent(LogInActivity.this,MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log_in);
         db = new DatabaseHelper(this);
-        e1 = (EditText) findViewById(R.id.loginEmail);
-        e2 = (EditText) findViewById(R.id.loginPassword);
-        b1 = (Button) findViewById(R.id.loginButton);
-        b2 = (Button) findViewById(R.id.loginRegister);
+        e1 =  findViewById(R.id.loginEmail);
+        e2 =  findViewById(R.id.loginPassword);
+        b1 =  findViewById(R.id.loginButton);
+        b2 =  findViewById(R.id.loginRegister);
         b2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -41,7 +62,15 @@ public class LogInActivity extends AppCompatActivity {
                 }
                 boolean checkmailpass = db.checkEmailPassword(mail, pass);
                 if (checkmailpass) {
+                    User user=new User(mail);
+                    SessionManagement sessionManagement=new SessionManagement(LogInActivity.this);
+                    sessionManagement.saveSession(user);
+
                     Toast.makeText(getApplicationContext(), "Successfully Login", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(LogInActivity.this,MainActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+
                 } else {
                     Toast.makeText(getApplicationContext(), "Wrong Entry", Toast.LENGTH_SHORT).show();
                 }
@@ -52,6 +81,5 @@ public class LogInActivity extends AppCompatActivity {
 
     public void btn_signup_activity(View view) {
         startActivity(new Intent(getApplicationContext(), SignUpActivity.class));
-
     }
 }

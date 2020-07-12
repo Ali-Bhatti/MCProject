@@ -5,8 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-
-import androidx.annotation.Nullable;
+import android.text.Editable;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
@@ -45,7 +44,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     //checking if email exists
     public boolean checkEmail(String email) {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor=null;
+        Cursor cursor = null;
         try {
             cursor = db.rawQuery("Select * from user where Email=?", new String[]{email});
             if (cursor.getCount() > 0) {
@@ -54,10 +53,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 return true;
             }
         } catch (Exception e) {
-                return false;
+            return false;
             // exception handling
         } finally {
-            if(cursor != null){
+            if (cursor != null) {
                 cursor.close();
             }
         }
@@ -66,7 +65,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     //checking the email and password
     public boolean checkEmailPassword(String email, String password) {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor=null;
+        Cursor cursor = null;
         try {
             cursor = db.rawQuery("Select * from user where Email=? and Password=?", new String[]{email, password});
             if (cursor.getCount() > 0) {
@@ -78,9 +77,43 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             return false;
             // exception handling
         } finally {
-            if(cursor != null){
+            if (cursor != null) {
                 cursor.close();
             }
         }
+    }
+
+    public String getName(String email) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        try (Cursor cursor = db.rawQuery("Select Name from user where Email=?", new String[]{email})) {
+            if (cursor.getCount() > 0) {
+                cursor.moveToFirst();
+                return cursor.getString(cursor.getColumnIndex("Name"));
+            }
+        } catch (Exception e) {
+            return "Please Login First";
+            // exception handling
+        }
+        return "";
+    }
+
+    public String getPassword(String email) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        try (Cursor cursor = db.rawQuery("Select Password from user where Email=?", new String[]{email})) {
+            if (cursor.getCount() > 0) {
+                cursor.moveToFirst();
+                return cursor.getString(cursor.getColumnIndex("Password"));
+            }
+        } catch (Exception e) {
+            return "Please Login First";
+            // exception handling
+        }
+        return "";
+    }
+
+    public void changePassword(String email, String NewPass) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("Password", NewPass);
+        int countUpdated = this.getWritableDatabase().update("user", contentValues, "Email=?", new String[]{email});
     }
 }

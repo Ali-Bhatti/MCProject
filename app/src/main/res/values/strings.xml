@@ -7,8 +7,10 @@
     <string name="gender">Gender:</string>
     <string name="male">Male</string>
     <string name="female">Female</string>
-    <string name="register">Register</string
-  
+    <string name="register">Register</string>
+
+ <string name="TODO"><b><i><u>My Profile</u></i></b></string>
+
     <string name="about_this_place">About This place:</string>
     <string name="app_name">Pakistan Tour Guide</string>
     <string name="search">Search</string>
@@ -17,4 +19,5 @@
     <string name="category">Category</string>
     <string name="famous_places">Famous Places</string>
     <string name="profile">Profile</string>
+    <string name="logout">Logout</string>
 </resources>

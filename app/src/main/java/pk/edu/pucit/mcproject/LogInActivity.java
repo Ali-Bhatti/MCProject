@@ -16,6 +16,11 @@ public class LogInActivity extends AppCompatActivity {
     DatabaseHelper db;
 
     @Override
+    public void onBackPressed() {
+        moveToMainActivity();
+    }
+
+    @Override
     protected void onStart() {
         super.onStart();
         //Check If user is already logged in

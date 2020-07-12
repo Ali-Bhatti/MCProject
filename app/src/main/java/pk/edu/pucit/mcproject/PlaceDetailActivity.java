@@ -1,17 +1,26 @@
 package pk.edu.pucit.mcproject;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.widget.NestedScrollView;
 import androidx.viewpager.widget.ViewPager;
-import androidx.viewpager2.widget.ViewPager2;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
+import android.text.Spanned;
+import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
-import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.tabs.TabLayout;
@@ -22,22 +31,41 @@ import com.karumi.dexter.listener.PermissionGrantedResponse;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.single.PermissionListener;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 
 public class PlaceDetailActivity extends AppCompatActivity {
-    private ViewPager placeimageviewPager;
-    private TabLayout viewPagerindicator;
+    private ViewPager placeImageViewPager;
+    private TabLayout viewPagerIndicator;
     private String AppBarName = "";
-
+    private Toolbar toolbar;
+    private TextView txtWikiData;
+    private static final String encoding = "UTF-8";
+    private ProgressBar progressBar;
+    private NestedScrollView nestedScrollView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_place_detail);
         //setting your own toolbar
-        Toolbar toolbar = findViewById(R.id.my_toolbar);
+        toolbar = findViewById(R.id.my_toolbar);
         setSupportActionBar(toolbar);
         //Setting back button of appbar
         toolbar.setNavigationIcon(R.drawable.ic_back_arrow); // Set the icon
@@ -55,18 +83,131 @@ public class PlaceDetailActivity extends AppCompatActivity {
             AppBarName = b.getString("AppBarTitle");
         Objects.requireNonNull(getSupportActionBar()).setTitle(AppBarName);
 
-        placeimageviewPager = findViewById(R.id.PlaceViewPager);
-        viewPagerindicator = findViewById(R.id.view_pager_indicator);
+        placeImageViewPager = findViewById(R.id.PlaceViewPager);
+        viewPagerIndicator = findViewById(R.id.view_pager_indicator);
         List<Integer> PlaceImages = new ArrayList<>();
         PlaceImages.add(R.drawable.image1);
         PlaceImages.add((R.drawable.image2));
         PlaceImages.add((R.drawable.image4));
 
         PlaceImageAdapter placeImageAdapter = new PlaceImageAdapter(PlaceImages);
-        placeimageviewPager.setAdapter(placeImageAdapter);
-        viewPagerindicator.setupWithViewPager(placeimageviewPager, true);
+        placeImageViewPager.setAdapter(placeImageAdapter);
+        viewPagerIndicator.setupWithViewPager(placeImageViewPager, true);
+
+        txtWikiData = findViewById(R.id.txt_city_detail);
+        progressBar = findViewById(R.id.progressBar);
+        nestedScrollView = findViewById(R.id.nested_scroll2);
+        // Enabling Scroll on "TextView" which is inside the "Nested Scroll View"
+        txtWikiData.setMovementMethod(new ScrollingMovementMethod());
+        nestedScrollView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                txtWikiData.getParent().requestDisallowInterceptTouchEvent(false);
+                return false;
+            }
+        });
+
+        txtWikiData.setOnTouchListener(new View.OnTouchListener() {
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                txtWikiData.getParent().requestDisallowInterceptTouchEvent(true);
+                return false;
+            }
+        });
 
 
+        Content content = new Content();
+       content.execute(AppBarName);
+
+    }
+
+    private class Content extends AsyncTask<String, Void, String> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressBar.setVisibility(View.VISIBLE);
+            //Toast.makeText(getApplicationContext(), "Fetching Data. Please wait.", Toast.LENGTH_SHORT).show();
+        }
+
+        @Override
+        protected String doInBackground(String[] params) {
+            try {
+
+                String keyword= params[0];
+
+                //Search the google for Wikipedia Links
+                Document google = Jsoup.connect("https://www.google.com/search?q=" + URLEncoder.encode(keyword + "wikipedia", encoding)).get();
+
+                //Get the first link about Wikipedia
+                String wikipediaURL = google.getElementsByTag("cite").get(0).text();
+                // reading last "search keywords"
+                String searchWord = wikipediaURL.substring(25);
+
+                //Use Wikipedia API to get JSON File
+                String wikipediaApiJSON = "https://www.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro=&explaintext=&titles="
+                        + URLEncoder.encode(searchWord, encoding);
+
+                PrintOnLog("WikiURL", wikipediaApiJSON);
+
+                URL url = new URL(wikipediaApiJSON);        // Convert String URL to java.net.URL
+                // Connection: to Wikipedia API
+                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+                urlConnection.setRequestMethod("GET");
+                urlConnection.connect();
+                InputStream inputStream = urlConnection.getInputStream();
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream, encoding);
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+
+                StringBuilder stringBuilder = new StringBuilder();
+                String line;
+
+                while ((line = bufferedReader.readLine()) != null) {
+                    stringBuilder.append(line);
+                }
+                String wikiData = stringBuilder.toString();
+                // Parse JSON Data
+                return parseJSONData(wikiData);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+                PrintOnLog("Error", e.toString());
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String formattedData) {
+            super.onPostExecute(formattedData);
+            progressBar.setVisibility(View.GONE);
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                // HTML Data
+                txtWikiData.setText(Html.fromHtml
+                        (formattedData, Html.FROM_HTML_MODE_LEGACY));
+            } else {
+                // HTML Data
+                Spanned data = Html.fromHtml(formattedData);
+                txtWikiData.setText(data);
+            }
+        }
+    }
+
+    private String parseJSONData(String wikiData) {
+        try {
+            // Convert String JSON (wikiData) to JSON Object
+            JSONObject rootJSON = new JSONObject(wikiData);
+            JSONObject query = rootJSON.getJSONObject("query");
+            JSONObject pages = query.getJSONObject("pages");
+            JSONObject number = pages.getJSONObject(pages.keys().next());
+
+            return number.getString("extract");
+        } catch (JSONException json) {
+            json.printStackTrace();
+        }
+
+        return null;
     }
 
     public void openGoogleMap(final View view) {
@@ -99,9 +240,12 @@ public class PlaceDetailActivity extends AppCompatActivity {
                     }
                 }).check();
     }
+    private void PrintOnLog(String tag , String message){
+        Log.i(tag,message);
+    }
 
-    private void LoadGoogleMap(String placeName, boolean isResturant) {
-        Uri gmmIntentUri = isResturant ? Uri.parse("geo:0,0?q=restaurants " + placeName + ", Pakistan") : Uri.parse("google.navigation:q=" + placeName + ", Pakistan");
+    private void LoadGoogleMap(String placeName, boolean isRestaurant) {
+        Uri gmmIntentUri = isRestaurant ? Uri.parse("geo:0,0?q=restaurants " + placeName + ", Pakistan") : Uri.parse("google.navigation:q=" + placeName + ", Pakistan");
         loadMapHelper(gmmIntentUri);
     }
 

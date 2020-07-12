@@ -88,7 +88,7 @@ public class Profile extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_profile, container, false);
+        final View view = inflater.inflate(R.layout.fragment_profile, container, false);
         DatabaseHelper db;
         db = new DatabaseHelper(getContext());
         final SessionManagement sessionManagement=new SessionManagement(getContext());
@@ -108,7 +108,7 @@ public class Profile extends Fragment {
                 startActivity(i);
             }
         });
-        TextView myPassword =  view.findViewById (R.id.editTextTextPassword);
+        final TextView myPassword =  view.findViewById (R.id.editTextTextPassword);
         String userPass=db.getPassword(useremail);
         myPassword.setText(userPass);
         ImageButton changePassBtn= view.findViewById(R.id.profImageBtnPassChange);
@@ -126,11 +126,19 @@ public class Profile extends Fragment {
             public void onClick(View v) {
                 Editable newPass = newPasswordBox.getText();
                 DatabaseHelper db;
-                db = new DatabaseHelper(getContext());
-                db.changePassword(useremail,newPass.toString());
-                newPasswordBox.setVisibility(View.INVISIBLE);
-                confirmPassBtn.setVisibility(View.INVISIBLE);
-                Toast.makeText(getContext(), "New Password Saved!", Toast.LENGTH_SHORT).show();
+                if (newPass.toString().equals("") ) {
+                    Toast.makeText(getContext(), "Fields Are Empty", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    db = new DatabaseHelper(getContext());
+                    db.changePassword(useremail,newPass.toString());
+                    String userPass=db.getPassword(useremail);
+                    myPassword.setText(userPass);
+                    newPasswordBox.setText("");
+                    newPasswordBox.setVisibility(View.INVISIBLE);
+                    confirmPassBtn.setVisibility(View.INVISIBLE);
+                    Toast.makeText(getContext(), "New Password Saved!", Toast.LENGTH_SHORT).show();
+                }
             }
         });
         return view;

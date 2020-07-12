@@ -1,79 +1,68 @@
 package pk.edu.pucit.mcproject;
 
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.MimeTypeMap;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.StorageTask;
+import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
 import static android.app.Activity.RESULT_OK;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link Add_Image_Fragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class Add_Image_Fragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
     private static final int PICK_IMAGE_REQUEST = 1;
     private Button mButtonChooseImage;
     private Button mButtonUpload;
-    private TextView mTextViewShowUploads;
+    private Button mButtonShowUploads;
+    private String category;
+    private String UserNAme="Usman";
+    private String UserEmail="Usman@gmail.com";
     private EditText PlaceName;
     private ImageView mImageView;
     private ProgressBar mProgressBar;
     private Uri Image_uri;
+    private  EditText aboutPlace;
+
+
+
+    private StorageReference mStorageRef;
+    private DatabaseReference mDatabaseRef;
+    private StorageTask mUploadTask;
+
 
     public Add_Image_Fragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment Add_Image_Fragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static Add_Image_Fragment newInstance(String param1, String param2) {
-        Add_Image_Fragment fragment = new Add_Image_Fragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -81,11 +70,33 @@ public class Add_Image_Fragment extends Fragment {
         // Inflate the layout for this fragment
         View view= inflater.inflate(R.layout.fragment_add__image_, container, false);
 
+        //spinner
+        Spinner Spinner =view.findViewById(R.id.spinner);
+
+
+        // Create an ArrayAdapter using the string array and a default spinner
+        ArrayAdapter<CharSequence> staticAdapter = ArrayAdapter
+                .createFromResource(getContext(), R.array.category_array,
+                        android.R.layout.simple_spinner_item);
+
+        // Specify the layout to use when the list of choices appears
+        staticAdapter
+                .setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        // Apply the adapter to the spinner
+        Spinner.setAdapter(staticAdapter);
+
         mButtonChooseImage = view.findViewById(R.id.btn_Browse_Image);
         mButtonUpload = view.findViewById(R.id.btn_Upload);
-        //PlaceName = view.findViewById(R.id.edit_text_file_name);
+        PlaceName =view.findViewById(R.id.Place_Name);
         mImageView = view.findViewById(R.id.imageView);
         mProgressBar = view.findViewById(R.id.progressBar);
+        aboutPlace=view.findViewById(R.id.txtWriteSomething);
+        mButtonShowUploads=view.findViewById(R.id.btn_show_uploads);
+        category=Spinner.getSelectedItem().toString();
+
+        mStorageRef = FirebaseStorage.getInstance().getReference("Images");
+        mDatabaseRef = FirebaseDatabase.getInstance().getReference("Images");
 
 
         mButtonChooseImage.setOnClickListener(new View.OnClickListener() {
@@ -99,8 +110,18 @@ public class Add_Image_Fragment extends Fragment {
         mButtonUpload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                String text=" Upload in progress";
+                if (mUploadTask != null && mUploadTask.isInProgress()) {
+                    Toast.makeText(getActivity(), "Upload in progress", Toast.LENGTH_SHORT).show();
+                } else {
+                    uploadFile();
+                }
             }
         });
+
+
+
 
         return view;
     }
@@ -120,6 +141,54 @@ public class Add_Image_Fragment extends Fragment {
                 && data != null && data.getData() != null) {
             Image_uri = data.getData();
             Picasso.get().load(Image_uri).into(mImageView);
+        }
+    }
+
+    private String getFileExtension(Uri uri) {
+        ContentResolver cR = getActivity().getContentResolver();//msla tha get activity check
+        MimeTypeMap mime = MimeTypeMap.getSingleton();
+        return mime.getExtensionFromMimeType(cR.getType(uri));
+    }
+
+
+    private void uploadFile() {
+        if (Image_uri != null) {
+            StorageReference fileReference = mStorageRef.child(System.currentTimeMillis()
+                    + "." + getFileExtension(Image_uri));
+            mUploadTask = fileReference.putFile(Image_uri)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            Handler handler = new Handler();
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mProgressBar.setProgress(0);
+                                }
+                            }, 500);
+                            Toast.makeText(getActivity(), "Upload successful", Toast.LENGTH_LONG).show();
+                            Upload upload = new Upload(PlaceName.getText().toString().trim(),
+                                    taskSnapshot.getMetadata().getReference().getDownloadUrl().toString(),category,UserNAme,UserEmail,aboutPlace.getText().toString().trim());
+
+                                    String uploadId = mDatabaseRef.push().getKey();
+                            mDatabaseRef.child(uploadId).setValue(upload);
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                            double progress = (100.0 * taskSnapshot.getBytesTransferred() / taskSnapshot.getTotalByteCount());
+                            mProgressBar.setProgress((int) progress);
+                        }
+                    });
+        } else {
+            Toast.makeText(getActivity(), "No file selected", Toast.LENGTH_SHORT).show();
         }
     }
 }

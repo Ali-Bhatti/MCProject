@@ -9,57 +9,28 @@
     <!-- TODO: Update blank fragment layout -->
 
 
-
-    <EditText
-        android:id="@+id/Place_Name"
-        android:layout_width="206dp"
-        android:layout_height="47dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="60dp"
-        android:editable="true"
-        android:ems="10"
-        android:hint="Enter Place Name"
-        android:inputType="textPersonName"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/txtPlaceName"
+    <Button
+        android:id="@+id/btn_Add_Image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="52dp"
-        android:text="Place Name"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toStartOf="@+id/Place_Name"
-        app:layout_constraintHorizontal_bias="0.59"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Spinner
-        android:id="@+id/spinner"
-        android:layout_width="200dp"
-        android:layout_height="30dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="60dp"
-        android:autofillHints="category"
-        android:background="@color/cardview_light_background"
+        android:text="Add Image"
+        app:layout_constraintBottom_toTopOf="@+id/btn_Add_Video"
         app:layout_constraintEnd_toEndOf="parent"
-        style="@style/TextAppearance.AppCompat.Widget.DropDownItem"
-        app:layout_constraintTop_toBottomOf="@+id/Place_Name" />
+        app:layout_constraintHorizontal_bias="0.511"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.745" />
 
-
-    <TextView
+    <Button
+        android:id="@+id/btn_Add_Video"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="43dp"
-        android:text="Category"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toStartOf="@+id/spinner"
-        app:layout_constraintHorizontal_bias="0.397"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtPlaceName" />
-
-
+        android:layout_marginBottom="452dp"
+        android:text="Add Video"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.506"
+        app:layout_constraintStart_toStartOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

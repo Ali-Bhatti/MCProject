@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "494698074420",
+    "firebase_url": "https://mc-project-fea75.firebaseio.com",
+    "project_id": "mc-project-fea75",
+    "storage_bucket": "mc-project-fea75.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:494698074420:android:90962e3fbea68d4b3a9561",
+        "android_client_info": {
+          "package_name": "pk.edu.pucit.mcproject"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "494698074420-fon9174o17jpht29eqr9oiksmtaj40q4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "pk.edu.pucit.mcproject",
+            "certificate_hash": "d94026142af0ebc80958d69cbcc4ef1a1821c2cf"
+          }
+        },
+        {
+          "client_id": "494698074420-bfq45ju693kcumntg0ildr0j27j3ckaa.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDTsfWXExfUDomGd0SUzgwB1ctCQhkCzmc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "494698074420-bfq45ju693kcumntg0ildr0j27j3ckaa.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

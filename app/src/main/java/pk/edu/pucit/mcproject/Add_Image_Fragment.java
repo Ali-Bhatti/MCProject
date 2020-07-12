@@ -22,8 +22,10 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -38,20 +40,19 @@ import static android.app.Activity.RESULT_OK;
 public class Add_Image_Fragment extends Fragment {
 
 
-
     private static final int PICK_IMAGE_REQUEST = 1;
     private Button mButtonChooseImage;
     private Button mButtonUpload;
     private Button mButtonShowUploads;
     private String category;
-    private String UserNAme="Usman";
-    private String UserEmail="Usman@gmail.com";
+    private String UserNAme = "Usman";
+    private String UserEmail = "Usman@gmail.com";
     private EditText PlaceName;
     private ImageView mImageView;
     private ProgressBar mProgressBar;
     private Uri Image_uri;
-    private  EditText aboutPlace;
-
+    private EditText aboutPlace;
+    String GeneratedFilePath = "";
 
 
     private StorageReference mStorageRef;
@@ -68,10 +69,10 @@ public class Add_Image_Fragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view= inflater.inflate(R.layout.fragment_add__image_, container, false);
+        View view = inflater.inflate(R.layout.fragment_add__image_, container, false);
 
         //spinner
-        Spinner Spinner =view.findViewById(R.id.spinner);
+        Spinner Spinner = view.findViewById(R.id.spinner);
 
 
         // Create an ArrayAdapter using the string array and a default spinner
@@ -88,12 +89,12 @@ public class Add_Image_Fragment extends Fragment {
 
         mButtonChooseImage = view.findViewById(R.id.btn_Browse_Image);
         mButtonUpload = view.findViewById(R.id.btn_Upload);
-        PlaceName =view.findViewById(R.id.Place_Name);
+        PlaceName = view.findViewById(R.id.Place_Name);
         mImageView = view.findViewById(R.id.imageView);
         mProgressBar = view.findViewById(R.id.progressBar);
-        aboutPlace=view.findViewById(R.id.txtWriteSomething);
-        mButtonShowUploads=view.findViewById(R.id.btn_show_uploads);
-        category=Spinner.getSelectedItem().toString();
+        aboutPlace = view.findViewById(R.id.txtWriteSomething);
+        mButtonShowUploads = view.findViewById(R.id.btn_show_uploads);
+        category = Spinner.getSelectedItem().toString();
 
         mStorageRef = FirebaseStorage.getInstance().getReference("Images");
         mDatabaseRef = FirebaseDatabase.getInstance().getReference("Images");
@@ -106,12 +107,20 @@ public class Add_Image_Fragment extends Fragment {
             }
         });
 
+        mButtonShowUploads.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), Show_Uploaded_Images.class);
+                startActivity(intent);
+            }
+        });
+
 
         mButtonUpload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                String text=" Upload in progress";
+                String text = " Upload in progress";
                 if (mUploadTask != null && mUploadTask.isInProgress()) {
                     Toast.makeText(getActivity(), "Upload in progress", Toast.LENGTH_SHORT).show();
                 } else {
@@ -119,8 +128,6 @@ public class Add_Image_Fragment extends Fragment {
                 }
             }
         });
-
-
 
 
         return view;
@@ -166,12 +173,23 @@ public class Add_Image_Fragment extends Fragment {
                                     mProgressBar.setProgress(0);
                                 }
                             }, 500);
-                            Toast.makeText(getActivity(), "Upload successful", Toast.LENGTH_LONG).show();
-                            Upload upload = new Upload(PlaceName.getText().toString().trim(),
-                                    taskSnapshot.getMetadata().getReference().getDownloadUrl().toString(),category,UserNAme,UserEmail,aboutPlace.getText().toString().trim());
+                            taskSnapshot.getStorage().getDownloadUrl().addOnCompleteListener(
+                                    new OnCompleteListener<Uri>() {
 
-                                    String uploadId = mDatabaseRef.push().getKey();
-                            mDatabaseRef.child(uploadId).setValue(upload);
+                                        @Override
+                                        public void onComplete(@NonNull Task<Uri> task) {
+                                            String fileLink = task.getResult().toString();
+                                            //next work with URL
+                                            Toast.makeText(getActivity(), "Upload successful", Toast.LENGTH_LONG).show();
+                                            Upload upload = new Upload(PlaceName.getText().toString().trim(),
+                                                  fileLink, category, UserNAme, UserEmail, aboutPlace.getText().toString().trim());
+
+                                            String uploadId = mDatabaseRef.push().getKey();
+                                            mDatabaseRef.child(uploadId).setValue(upload);
+
+                                        }
+                                    });
+
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {

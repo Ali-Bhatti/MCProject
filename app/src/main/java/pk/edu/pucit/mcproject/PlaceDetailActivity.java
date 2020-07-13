@@ -42,6 +42,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
+import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -133,7 +134,10 @@ public class PlaceDetailActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(String[] params) {
             try {
-
+                    
+                if(!isInternetAvailable()){
+                    return "No Internet Connection";
+                }
                 String keyword= params[0];
 
                 //Search the google for Wikipedia Links
@@ -182,15 +186,19 @@ public class PlaceDetailActivity extends AppCompatActivity {
             super.onPostExecute(formattedData);
             progressBar.setVisibility(View.GONE);
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                // HTML Data
-                txtWikiData.setText(Html.fromHtml
-                        (formattedData, Html.FROM_HTML_MODE_LEGACY));
-            } else {
-                // HTML Data
-                Spanned data = Html.fromHtml(formattedData);
-                txtWikiData.setText(data);
-            }
+            if(formattedData.equals("No Internet Connection")){
+               Toast.makeText(getApplicationContext(), formattedData, Toast.LENGTH_SHORT).show();
+           }
+           else {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    // HTML Data
+                    txtWikiData.setText(formattedData);
+                } else {
+                    // HTML Data
+                    Spanned data = Html.fromHtml(formattedData);
+                    txtWikiData.setText(data);
+                }
+           }
         }
     }
 
@@ -209,7 +217,21 @@ public class PlaceDetailActivity extends AppCompatActivity {
 
         return null;
     }
+    public boolean isInternetAvailable() {
+        try {
+            InetAddress ipAddr = InetAddress.getByName("google.com"); //You can replace it with your name
 
+            if (ipAddr.equals("")) {
+                return false;
+            } else {
+                return true;
+            }
+
+        } catch (Exception e) {
+            return false;
+        }
+
+    }
     public void openGoogleMap(final View view) {
         final String placeName = AppBarName;
 

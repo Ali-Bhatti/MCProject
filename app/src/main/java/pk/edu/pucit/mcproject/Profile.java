@@ -29,13 +29,8 @@ public class Profile extends Fragment {
         super.onActivityCreated(savedInstanceState);
         SessionManagement sessionManagement=new SessionManagement(getContext());
         String useremail=sessionManagement.getSession();
-        if(useremail!=null){
-            Toast.makeText(getContext(), useremail, Toast.LENGTH_SHORT).show();
-            //do nothing
-        }
-        else{
+        if(useremail==null)
             moveToLoginActivity();
-        }
 
     }
     private void moveToLoginActivity(){

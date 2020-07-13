@@ -135,7 +135,10 @@ public class PlaceDetailActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(String[] params) {
             try {
-
+                    
+                if(!isInternetAvailable()){
+                    return "No Internet Connection";
+                }
                 String keyword= params[0];
                 if(!isInternetAvailable()){
                     return "No Internet Connection";
@@ -186,7 +189,6 @@ public class PlaceDetailActivity extends AppCompatActivity {
         protected void onPostExecute(String formattedData) {
             super.onPostExecute(formattedData);
             progressBar.setVisibility(View.GONE);
-
            if(formattedData.equals("No Internet Connection")){
                Toast.makeText(getApplicationContext(), formattedData, Toast.LENGTH_SHORT).show();
            }
@@ -221,11 +223,9 @@ public class PlaceDetailActivity extends AppCompatActivity {
 
         return null;
     }
-
     public boolean isInternetAvailable() {
         try {
             InetAddress ipAddr = InetAddress.getByName("google.com"); //You can replace it with your name
-
             if (ipAddr.equals("")) {
                 return false;
             } else {
@@ -237,7 +237,6 @@ public class PlaceDetailActivity extends AppCompatActivity {
         }
 
     }
-
     public void openGoogleMap(final View view) {
         final String placeName = AppBarName;
 

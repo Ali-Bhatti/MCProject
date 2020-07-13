@@ -3,6 +3,7 @@ package pk.edu.pucit.mcproject;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.text.HtmlCompat;
 import androidx.core.widget.NestedScrollView;
 import androidx.viewpager.widget.ViewPager;
 
@@ -139,6 +140,9 @@ public class PlaceDetailActivity extends AppCompatActivity {
                     return "No Internet Connection";
                 }
                 String keyword= params[0];
+                if(!isInternetAvailable()){
+                    return "No Internet Connection";
+                }
 
                 //Search the google for Wikipedia Links
                 Document google = Jsoup.connect("https://www.google.com/search?q=" + URLEncoder.encode(keyword + "wikipedia", encoding)).get();
@@ -185,19 +189,19 @@ public class PlaceDetailActivity extends AppCompatActivity {
         protected void onPostExecute(String formattedData) {
             super.onPostExecute(formattedData);
             progressBar.setVisibility(View.GONE);
-
-            if(formattedData.equals("No Internet Connection")){
+           if(formattedData.equals("No Internet Connection")){
                Toast.makeText(getApplicationContext(), formattedData, Toast.LENGTH_SHORT).show();
            }
            else {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    // HTML Data
-                    txtWikiData.setText(formattedData);
-                } else {
-                    // HTML Data
-                    Spanned data = Html.fromHtml(formattedData);
-                    txtWikiData.setText(data);
-                }
+               if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                   // HTML Data
+                   //txtWikiData.setText(HtmlCompat.fromHtml(formattedData, HtmlCompat.FROM_HTML_MODE_LEGACY));
+                   txtWikiData.setText(formattedData);
+               } else {
+                   // HTML Data
+                   Spanned data = Html.fromHtml(formattedData);
+                   txtWikiData.setText(data);
+               }
            }
         }
     }
@@ -209,8 +213,10 @@ public class PlaceDetailActivity extends AppCompatActivity {
             JSONObject query = rootJSON.getJSONObject("query");
             JSONObject pages = query.getJSONObject("pages");
             JSONObject number = pages.getJSONObject(pages.keys().next());
+            String formattedData = number.getString("extract");
 
-            return number.getString("extract");
+            PrintOnLog("Data",formattedData);
+            return formattedData;
         } catch (JSONException json) {
             json.printStackTrace();
         }
@@ -220,7 +226,6 @@ public class PlaceDetailActivity extends AppCompatActivity {
     public boolean isInternetAvailable() {
         try {
             InetAddress ipAddr = InetAddress.getByName("google.com"); //You can replace it with your name
-
             if (ipAddr.equals("")) {
                 return false;
             } else {

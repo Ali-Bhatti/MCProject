@@ -3,6 +3,7 @@ package pk.edu.pucit.mcproject;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.text.HtmlCompat;
 import androidx.core.widget.NestedScrollView;
 import androidx.viewpager.widget.ViewPager;
 
@@ -42,6 +43,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
+import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -135,6 +137,9 @@ public class PlaceDetailActivity extends AppCompatActivity {
             try {
 
                 String keyword= params[0];
+                if(!isInternetAvailable()){
+                    return "No Internet Connection";
+                }
 
                 //Search the google for Wikipedia Links
                 Document google = Jsoup.connect("https://www.google.com/search?q=" + URLEncoder.encode(keyword + "wikipedia", encoding)).get();
@@ -182,15 +187,20 @@ public class PlaceDetailActivity extends AppCompatActivity {
             super.onPostExecute(formattedData);
             progressBar.setVisibility(View.GONE);
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                // HTML Data
-                txtWikiData.setText(Html.fromHtml
-                        (formattedData, Html.FROM_HTML_MODE_LEGACY));
-            } else {
-                // HTML Data
-                Spanned data = Html.fromHtml(formattedData);
-                txtWikiData.setText(data);
-            }
+           if(formattedData.equals("No Internet Connection")){
+               Toast.makeText(getApplicationContext(), formattedData, Toast.LENGTH_SHORT).show();
+           }
+           else {
+               if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                   // HTML Data
+                   //txtWikiData.setText(HtmlCompat.fromHtml(formattedData, HtmlCompat.FROM_HTML_MODE_LEGACY));
+                   txtWikiData.setText(formattedData);
+               } else {
+                   // HTML Data
+                   Spanned data = Html.fromHtml(formattedData);
+                   txtWikiData.setText(data);
+               }
+           }
         }
     }
 
@@ -201,13 +211,31 @@ public class PlaceDetailActivity extends AppCompatActivity {
             JSONObject query = rootJSON.getJSONObject("query");
             JSONObject pages = query.getJSONObject("pages");
             JSONObject number = pages.getJSONObject(pages.keys().next());
+            String formattedData = number.getString("extract");
 
-            return number.getString("extract");
+            PrintOnLog("Data",formattedData);
+            return formattedData;
         } catch (JSONException json) {
             json.printStackTrace();
         }
 
         return null;
+    }
+
+    public boolean isInternetAvailable() {
+        try {
+            InetAddress ipAddr = InetAddress.getByName("google.com"); //You can replace it with your name
+
+            if (ipAddr.equals("")) {
+                return false;
+            } else {
+                return true;
+            }
+
+        } catch (Exception e) {
+            return false;
+        }
+
     }
 
     public void openGoogleMap(final View view) {

@@ -21,10 +21,12 @@
         android:fillViewport="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/my_toolbar" >
+        app:layout_constraintTop_toBottomOf="@id/my_toolbar"
+        app:layout_constraintVertical_bias="0.0">
 
         <!--"Nested ScrollView" or "Scroll view" has only one single child that is why I have include
         all the components of page within the constraint layout-->
@@ -39,15 +41,14 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintBottom_toTopOf="@id/about_place_txt_view"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                />
+                app:layout_constraintStart_toStartOf="parent" />
 
             <TextView
                 android:id="@+id/about_place_txt_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="2dp"
-                android:text="@string/about_this_place"
+                android:text="@string/about_this_city"
                 android:textColor="@color/design_default_color_on_secondary"
                 android:textSize="8pt"
                 android:textStyle="bold"
@@ -56,31 +57,54 @@
                 app:layout_constraintTop_toBottomOf="@id/image" />
 
             <TextView
-                android:id="@+id/textView"
+                android:id="@+id/txt_city_detail"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="118dp"
                 android:padding="6dp"
-                android:text="Murree (Punjabi, Urdu: مری‎, marī, meaning [2]) is a mountain resort town, located in the Galyat region of the Pir Panjal Range, within the Rawalpindi District of Punjab, Pakistan. It forms the outskirts of the Islamabad-Rawalpindi metropolitan area, and is about 30 km (19 mi) northeast of Islamabad. It has average altitude of 2,291 metres (7,516 ft).["
+                android:scrollbars="vertical"
                 android:textColor="#121111"
                 android:textSize="6pt"
+                android:elevation="3dp"
+                app:layout_constraintVertical_weight="1.0"
+                app:layout_constraintBottom_toTopOf="@id/txtFamousPlaces"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/about_place_txt_view" />
-
+                app:layout_constraintTop_toBottomOf="@id/about_place_txt_view"
+                app:layout_constraintVertical_bias="0.0" />
 
             <ImageButton
-                android:id="@+id/imageButton"
+                android:id="@+id/imgBtnDirection"
                 android:layout_width="120dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
                 android:backgroundTint="#067FDF"
+                android:onClick="openGoogleMap"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/imgBtnResturant"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView"
+                app:layout_constraintTop_toBottomOf="@+id/txt_city_detail"
                 app:layout_constraintVertical_bias="0.0"
                 app:srcCompat="@android:drawable/ic_menu_directions" />
+
+            <ImageButton
+                android:id="@+id/imgBtnResturant"
+                android:layout_width="59dp"
+                android:layout_height="59dp"
+                android:layout_marginEnd="56dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/resturant_logo"
+                android:contentDescription="@string/see_nearby_restaurants"
+                android:elevation="8dp"
+                android:onClick="openGoogleMap"
+                app:layout_constraintBottom_toTopOf="@id/txtFamousPlaces"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.837"
+                app:layout_constraintStart_toEndOf="@id/imgBtnDirection"
+                app:layout_constraintTop_toBottomOf="@+id/txt_city_detail"
+                app:layout_constraintVertical_bias="1.0" />
 
             <TextView
                 android:id="@+id/txtFamousPlaces"
@@ -93,24 +117,36 @@
                 android:textSize="8pt"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/imageButton" />
+                app:layout_constraintTop_toBottomOf="@id/imgBtnDirection" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_vertical1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@color/bgcolor"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/txtFamousPlaces"
-                app:layout_constraintVertical_bias="0.0"
-                android:background="@color/bgcolor"/>
+                app:layout_constraintVertical_bias="0.0" />
+
+            <ProgressBar
+                android:id="@+id/progressBar2"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="@+id/txt_city_detail"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.498"
+                app:layout_constraintStart_toStartOf="@+id/txt_city_detail"
+                app:layout_constraintTop_toBottomOf="@+id/about_place_txt_view" />
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

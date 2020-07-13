@@ -15,9 +15,9 @@ import java.util.Objects;
 public class SelectedCategory extends AppCompatActivity {
 
     private String[] categorys = {"Famous Cities", "Valleys", "Sea View","Historical Places" , "Desert"};
-    private String[][] details = {{"Karachi", "Lahore", "Faisalabad", "Multan", "Hyderabad", "Gujranwala", "Peshawar", "Quetta", "Islamabad"},
-            {"Shigar Valley", "Gilgit Valley", "Hunza Valley", "Nagar Valley", "Skardu Valley", "Rupal Valley", "Yasin Valley", "Naltar Valley", "Bagrot Valley", "Chiporsun Valley"},
-            {"Karachi SeaView", "Balochistan SeaView"},
+    private String[][] details = {{"Islamabad" ,"Lahore", "Karachi",  "Faisalabad", "Multan", "Hyderabad", "Gujranwala", "Peshawar", "Quetta"},
+            {"Shigar Valley", "Gilgit Valley", "Hunza Valley", "Nagar Valley", "Skardu Valley", "Rupal Valley", "Yasin Valley", "Naltar Valley", "Bagrot Valley", "Chapursan Valley"},
+            {"Clifton Sea View", "Gwadar Sea View"},
             {"Begum Shahi Mosque", "Mohenjo-Daro", "Rohtas Fort", "Taxila", "Wazir Khan Mosque", "Katasraj Temples", "Lahore Fort", "Kot Diji", "Takht-i-Bhai", "Hiran Minar", "Ranikot Fort", "Nagarparkar Jain Temples", "Tomb of Jahangir"},
             {"Kharan Desert", "Thar Desert", "Cholistan Desert", "Cold Desert, Skardu"}
             };
@@ -41,9 +41,7 @@ public class SelectedCategory extends AppCompatActivity {
                 onBackPressed();
             }
         });
-
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-
         //to get value passed to activity
         Bundle b = getIntent().getExtras();
         if(b != null)
@@ -65,6 +63,7 @@ public class SelectedCategory extends AppCompatActivity {
                 if(pos == 0) {
                     Intent intent = new Intent(getApplicationContext(),City_details.class);
                     intent.putExtra("AppBarTitle",details[pos][position]);
+                    intent.putExtra("position",position);
                     startActivity(intent);
                     //makeToast(details[pos][position], true);
                 }else{

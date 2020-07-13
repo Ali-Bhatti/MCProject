@@ -1,5 +1,16 @@
 <resources>
+    <string name="login">Login</string>
+    <string name="name">Name</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="gender">Gender:</string>
+    <string name="male">Male</string>
+    <string name="female">Female</string>
+    <string name="register">Register</string>
+    <string name="TODO"><b><i><u>My Profile</u></i></b></string>
     <string name="about_this_place">About This place:</string>
+    <string name="about_this_city">About This City:</string>
     <string name="app_name">Pakistan Tour Guide</string>
     <string name="search">Search</string>
     <string name="home">Home</string>
@@ -15,4 +26,9 @@
     </array>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="logout">Logout</string>
+    <string name="button_to_see_direction">It is button to see direction of above place</string>
+    <string name="see_nearby_restaurants">This button is use to see nearby restaurants</string>
+
 </resources>

@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".PlaceDetailActivity"
-    android:background="#FFFFFF">
+    android:background="#FFFFFF"
+    tools:context=".PlaceDetailActivity">
 
     <include
         android:id="@+id/my_toolbar"
@@ -16,6 +16,7 @@
 
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/nested_scroll2"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:fillViewport="true"
@@ -24,63 +25,100 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/my_toolbar" >
+        app:layout_constraintTop_toBottomOf="@id/my_toolbar">
 
         <!--"Nested ScrollView" or "Scroll view" has only one single child that is why I have include
         all the components of page within the constraint layout-->
-       <androidx.constraintlayout.widget.ConstraintLayout
-           android:layout_width="match_parent"
-           android:layout_height="wrap_content">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-           <include
-               android:id="@+id/image"
-               layout="@layout/place_image_viewer"
-               android:layout_width="match_parent"
-               android:layout_height="wrap_content"
-               app:layout_constraintBottom_toTopOf="@id/about_place_txt_view"
-               app:layout_constraintEnd_toEndOf="parent"
-               app:layout_constraintStart_toStartOf="parent"
-              />
+            <include
+                android:id="@+id/image"
+                layout="@layout/place_image_viewer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toTopOf="@id/about_place_txt_view"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
 
-           <TextView
-               android:id="@+id/about_place_txt_view"
-               android:layout_width="match_parent"
-               android:layout_height="wrap_content"
-               android:padding="2dp"
-               android:text="@string/about_this_place"
-               android:textColor="@color/design_default_color_on_secondary"
-               android:textSize="8pt"
-               android:textStyle="bold"
-               app:layout_constraintEnd_toEndOf="parent"
-               app:layout_constraintStart_toStartOf="parent"
-               app:layout_constraintTop_toBottomOf="@id/image" />
+            <TextView
+                android:id="@+id/about_place_txt_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="2dp"
+                android:text="@string/about_this_place"
+                android:textColor="@color/design_default_color_on_secondary"
+                android:textSize="8pt"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/image" />
 
-           <TextView
-               android:id="@+id/textView"
-               android:layout_width="match_parent"
-               android:layout_height="wrap_content"
-               android:padding="6dp"
-               android:text="Murree (Punjabi, Urdu: مری‎, marī, meaning [2]) is a mountain resort town, located in the Galyat region of the Pir Panjal Range, within the Rawalpindi District of Punjab, Pakistan. It forms the outskirts of the Islamabad-Rawalpindi metropolitan area, and is about 30 km (19 mi) northeast of Islamabad. It has average altitude of 2,291 metres (7,516 ft).["
-               android:textColor="#121111"
-               android:textSize="6pt"
-               app:layout_constraintEnd_toEndOf="parent"
-               app:layout_constraintStart_toStartOf="parent"
-               app:layout_constraintTop_toBottomOf="@id/about_place_txt_view" />
+            <TextView
+                android:id="@+id/txt_city_detail"
+                android:layout_width="match_parent"
+                android:layout_height="118dp"
+                android:elevation="3dp"
+                android:padding="6dp"
+                android:scrollbars="vertical"
+                android:textColor="#121111"
+                android:textSize="6pt"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/about_place_txt_view"
+                app:layout_constraintVertical_bias="0.0"
+                app:layout_constraintVertical_weight="1.0" />
 
-           <ImageButton
-               android:id="@+id/imageButton"
-               android:layout_width="120dp"
-               android:layout_height="wrap_content"
-               android:layout_marginStart="10dp"
-               android:layout_marginTop="30dp"
-               android:layout_marginBottom="10dp"
-               android:backgroundTint="#067FDF"
-               app:layout_constraintBottom_toBottomOf="parent"
-               app:layout_constraintStart_toStartOf="parent"
-               app:layout_constraintTop_toBottomOf="@+id/textView"
-               app:layout_constraintVertical_bias="1.0"
-               app:srcCompat="@android:drawable/ic_menu_directions" />
-       </androidx.constraintlayout.widget.ConstraintLayout>
+            <ImageButton
+                android:id="@+id/imgBtnDirection"
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginBottom="10dp"
+                android:backgroundTint="#067FDF"
+                android:contentDescription="@string/button_to_see_direction"
+                android:onClick="openGoogleMap"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/imgBtnResturant"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/txt_city_detail"
+                app:layout_constraintVertical_bias="0.982"
+                app:srcCompat="@android:drawable/ic_menu_directions" />
+
+            <ImageButton
+                android:id="@+id/imgBtnResturant"
+                android:layout_width="59dp"
+                android:layout_height="59dp"
+                android:layout_marginEnd="56dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/resturant_logo"
+                android:elevation="8dp"
+                android:onClick="openGoogleMap"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/imgBtnDirection"
+                app:layout_constraintTop_toBottomOf="@+id/txt_city_detail"
+                app:layout_constraintVertical_bias="1.0"
+                android:contentDescription="@string/see_nearby_restaurants" />
+
+            <ProgressBar
+                android:id="@+id/progressBar"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="@+id/txt_city_detail"
+                app:layout_constraintEnd_toEndOf="@+id/about_place_txt_view"
+                app:layout_constraintHorizontal_bias="0.498"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/about_place_txt_view" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -18,8 +18,7 @@ import android.widget.Toast;
 
 public class Home extends Fragment {
 
-    private String[] famousPlaces = {"Badshahi Mosque", "Minar-e-Pakistan", "Shahi Qala", "Behria Grand Mosque", "Anarkli", "Masjid wazir khan", "Mochi gate", "Hunza vali", "Naran", "Lahore Food-Street"};
-    //private String[] categorys = {"Capitals", "Food", "Mountain Areas", "Sea View", "Desert", "Cultural Places", "Ancient Places"};
+    private String[] famousPlaces = {"Badshahi Mosque", "Minar-e-Pakistan", "Faisal Masjid" , "Lahore Fort","Mohenjo-Daro", "Gilgit Valley", "Hunza Valley" ,"Bahria Grand Mosque ", "Anarkli", "Masjid wazir khan", "Mochi gate", "Hunza vali", "Naran", "Fort Road Food Street"};
     private String[] categorys = {"Famous Cities", "Valleys", "Sea View", "Historical Places" , "Desert"};
 
     @Override

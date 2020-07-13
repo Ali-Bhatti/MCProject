@@ -14,14 +14,25 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
+
 
 public class Contribute extends Fragment {
 
-
-    public Contribute() {
-        // Required empty public constructor
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        SessionManagement sessionManagement=new SessionManagement(getContext());
+        String useremail=sessionManagement.getSession();
+        if(useremail==null)
+            moveToLoginActivity();
     }
 
+
+    private void moveToLoginActivity(){
+        Intent intent = new Intent(getContext(),LogInActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

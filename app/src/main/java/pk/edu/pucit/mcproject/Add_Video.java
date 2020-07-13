@@ -9,6 +9,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
 import android.os.Handler;
@@ -56,7 +57,7 @@ public class Add_Video extends AppCompatActivity {
     private ProgressBar mProgressBar;
     private Uri Video_uri;
     private EditText aboutPlace;
-
+    private Toolbar toolbar;
     private StorageReference mStorageRef;
     private DatabaseReference mDatabaseRef;
     private StorageTask mUploadTask;
@@ -65,6 +66,21 @@ public class Add_Video extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_add__video);
+        // getting toolbar and setting the name in toolbar
+        toolbar = findViewById(R.id.add_video_toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("Video Upload");
+
+        //Handling Up-button in App-Bar
+        toolbar.setNavigationIcon(R.drawable.ic_back_arrow); // Set the icon
+        // Icon click listener
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+
         //spinner
         Spinner Spinner = findViewById(R.id.spinner);
 

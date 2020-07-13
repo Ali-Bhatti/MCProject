@@ -10,6 +10,10 @@
     <color name="colorAccent">#03DAC5</color>
     <color name="bgcolor">#68CCCCCC</color>
     <color name="yellow">#FFEB3B</color>
+
+    <color name="Gray">#D3D3D3</color>
+
     <color name="resturantLogoColor">#00154F</color>
     <color name="circleColor">#F49F1C</color>
+
 </resources>

@@ -18,6 +18,15 @@
     <string name="category">Category</string>
     <string name="famous_places">Famous Places</string>
     <string name="profile">Profile</string>
+    <array name="category_array">
+        <item>Hill station</item>
+        <item>sea view</item>
+        <item>ancient places</item>
+        <item>citiese</item>
+    </array>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
     <string name="logout">Logout</string>
     <string name="button_to_see_direction">It is button to see direction of above place</string>
     <string name="see_nearby_restaurants">This button is use to see nearby restaurants</string>

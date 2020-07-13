@@ -19,4 +19,14 @@
         android:name="pk.edu.pucit.mcproject.Profile"
         android:label="@string/profile"
         tools:layout="@layout/fragment_profile" />
+    <fragment
+        android:id="@+id/Add_image"
+        android:name="pk.edu.pucit.mcproject.Add_Image_Fragment"
+        android:label="AddImage"
+        tools:layout="@layout/fragment_add__image_" />
+    <fragment
+        android:id="@+id/Add_Video"
+        android:name="pk.edu.pucit.mcproject.Add_Video"
+        android:label="AddVideo"
+        tools:layout="@layout/fragment_add__video" />
 </navigation>

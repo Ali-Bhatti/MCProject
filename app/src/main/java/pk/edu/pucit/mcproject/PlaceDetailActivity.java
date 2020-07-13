@@ -140,10 +140,7 @@ public class PlaceDetailActivity extends AppCompatActivity {
                     return "No Internet Connection";
                 }
                 String keyword= params[0];
-                if(!isInternetAvailable()){
-                    return "No Internet Connection";
-                }
-
+              
                 //Search the google for Wikipedia Links
                 Document google = Jsoup.connect("https://www.google.com/search?q=" + URLEncoder.encode(keyword + "wikipedia", encoding)).get();
 

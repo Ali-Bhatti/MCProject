@@ -32,6 +32,7 @@ class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHolder> {
         holder.placeName.setText(uploadCurrent.getPlaceName());
         holder.category.setText(uploadCurrent.getCategory());
         holder.details.setText(uploadCurrent.getAboutPlace());
+        holder.UserName.setText(uploadCurrent.getUserName());
         Picasso.get()
                 .load(uploadCurrent.getImageUrl())
                 .placeholder(R.mipmap.ic_launcher)
@@ -48,12 +49,14 @@ class ImageAdapter extends RecyclerView.Adapter<ImageAdapter.ImageViewHolder> {
         public TextView category;
         public TextView details;
         public ImageView imageView;
+        public TextView UserName;
         public ImageViewHolder(View itemView) {
             super(itemView);
             placeName = itemView.findViewById(R.id.Place_Name);
             category = itemView.findViewById(R.id.Category);
             details = itemView.findViewById(R.id.details);
             imageView = itemView.findViewById(R.id.image_View);
+            UserName=itemView.findViewById(R.id.User_Name);
         }
     }
 }

@@ -6,9 +6,12 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import android.os.Handler;
+import android.os.PersistableBundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,8 +38,8 @@ import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
 import static android.app.Activity.RESULT_OK;
-
-public class Add_Image_Fragment extends Fragment {
+//Activity ha
+public class Add_Image_Fragment extends AppCompatActivity {
 
 
     private static final int PICK_IMAGE_REQUEST = 1;
@@ -57,13 +60,71 @@ public class Add_Image_Fragment extends Fragment {
     private DatabaseReference mDatabaseRef;
     private StorageTask mUploadTask;
 
+    @Override
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.fragment_add__image_);
 
-    public Add_Image_Fragment() {
-        // Required empty public constructor
+        //spinner
+        Spinner Spinner = findViewById(R.id.spinner);
+
+
+        // Create an ArrayAdapter using the string array and a default spinner
+        ArrayAdapter<CharSequence> staticAdapter = ArrayAdapter
+                .createFromResource(getApplicationContext(), R.array.category_array,
+                        android.R.layout.simple_spinner_item);
+
+        // Specify the layout to use when the list of choices appears
+        staticAdapter
+                .setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        // Apply the adapter to the spinner
+        Spinner.setAdapter(staticAdapter);
+
+        mButtonChooseImage = findViewById(R.id.btn_Browse_Video);
+        mButtonUpload = findViewById(R.id.btn_Upload);
+        PlaceName = findViewById(R.id.Place_Name);
+        mImageView =findViewById(R.id.imageView);
+        mProgressBar =findViewById(R.id.progressBar);
+        aboutPlace = findViewById(R.id.txtWriteSomething);
+        mButtonShowUploads = findViewById(R.id.btn_show_uploads);
+        category = Spinner.getSelectedItem().toString();
+
+        mStorageRef = FirebaseStorage.getInstance().getReference("Images");
+        mDatabaseRef = FirebaseDatabase.getInstance().getReference("Images");
+
+
+        mButtonChooseImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openFileChooser();
+            }
+        });
+
+        mButtonShowUploads.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), Show_Uploaded_Images.class);
+                startActivity(intent);
+            }
+        });
+
+
+        mButtonUpload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String text = " Upload in progress";
+                if (mUploadTask != null && mUploadTask.isInProgress()) {
+                    Toast.makeText(getApplicationContext(), "Upload in progress", Toast.LENGTH_SHORT).show();
+                } else {
+                    uploadFile();
+                }
+            }
+        });
     }
 
-
-    @Override
+    /* @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -129,7 +190,7 @@ public class Add_Image_Fragment extends Fragment {
 
 
         return view;
-    }
+    }*/
 
 
     private void openFileChooser() {
@@ -150,7 +211,7 @@ public class Add_Image_Fragment extends Fragment {
     }
 
     private String getFileExtension(Uri uri) {
-        ContentResolver cR = getActivity().getContentResolver();//msla tha get activity check
+        ContentResolver cR = getApplicationContext().getContentResolver();//msla tha get activity check
         MimeTypeMap mime = MimeTypeMap.getSingleton();
         return mime.getExtensionFromMimeType(cR.getType(uri));
     }
@@ -178,7 +239,7 @@ public class Add_Image_Fragment extends Fragment {
                                         public void onComplete(@NonNull Task<Uri> task) {
                                             String fileLink = task.getResult().toString();
                                             //next work with URL
-                                            Toast.makeText(getActivity(), "Upload successful", Toast.LENGTH_LONG).show();
+                                            Toast.makeText(getApplicationContext(), "Upload successful", Toast.LENGTH_LONG).show();
                                             Upload upload = new Upload(PlaceName.getText().toString().trim(),
                                                   fileLink, category, UserNAme, UserEmail, aboutPlace.getText().toString().trim());
 
@@ -193,7 +254,7 @@ public class Add_Image_Fragment extends Fragment {
                     .addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     })
                     .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
@@ -204,7 +265,7 @@ public class Add_Image_Fragment extends Fragment {
                         }
                     });
         } else {
-            Toast.makeText(getActivity(), "No file selected", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "No file selected", Toast.LENGTH_SHORT).show();
         }
     }
 }

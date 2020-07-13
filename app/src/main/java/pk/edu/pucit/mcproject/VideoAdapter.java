@@ -35,6 +35,7 @@ class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoViewHolder> {
         holder.placeName.setText(uploadCurrent.getPlaceName());
         holder.category.setText(uploadCurrent.getCategory());
         holder.details.setText(uploadCurrent.getAboutPlace());
+        holder.UserName.setText(uploadCurrent.getUserName());
        /* Picasso.get()
                 .load(uploadCurrent.getImageUrl())
                 .placeholder(R.mipmap.ic_launcher)
@@ -44,6 +45,7 @@ class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoViewHolder> {
         Uri myUri = Uri.parse(uploadCurrent.getImageUrl());
         holder.videoView.setVideoURI(myUri);
         holder.videoView.requestFocus();
+
         //VideoView.setMediaController(new MediaController(mContext));
         holder.videoView.start();
     }
@@ -56,12 +58,15 @@ class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoViewHolder> {
         public TextView category;
         public TextView details;
         public VideoView videoView;
+        public TextView UserName;
         public VideoViewHolder(View itemView) {
             super(itemView);
             placeName = itemView.findViewById(R.id.Place_Name);
             category = itemView.findViewById(R.id.Category);
             details = itemView.findViewById(R.id.details);
             videoView = itemView.findViewById(R.id.video_View);
+            UserName=itemView.findViewById(R.id.User_Name);
+
         }
     }
 

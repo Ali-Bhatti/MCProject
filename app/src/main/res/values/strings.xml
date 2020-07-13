@@ -8,7 +8,7 @@
     <string name="male">Male</string>
     <string name="female">Female</string>
     <string name="register">Register</string>
-    <string name="TODO"><b><i><u>My Profile</u></i></b></string>
+    <string name="User_Profile"><b><i><u>Profile</u></i></b></string>
     <string name="about_this_place">About This place:</string>
     <string name="about_this_city">About This City:</string>
     <string name="app_name">Pakistan Tourist Guide</string>
@@ -30,5 +30,6 @@
     <string name="logout">Logout</string>
     <string name="button_to_see_direction">It is button to see direction of above place</string>
     <string name="see_nearby_restaurants">This button is use to see nearby restaurants</string>
+    <string name="change_password">Change Password</string>
 
 </resources>

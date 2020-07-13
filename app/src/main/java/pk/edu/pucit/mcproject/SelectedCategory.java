@@ -41,7 +41,6 @@ public class SelectedCategory extends AppCompatActivity {
                 onBackPressed();
             }
         });
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
         //to get value passed to activity
         Bundle b = getIntent().getExtras();
         if(b != null)

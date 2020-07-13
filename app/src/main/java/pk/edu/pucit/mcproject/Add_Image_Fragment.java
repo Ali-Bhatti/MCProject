@@ -8,6 +8,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
 import android.os.Handler;
@@ -54,8 +55,7 @@ public class Add_Image_Fragment extends AppCompatActivity {
     private ProgressBar mProgressBar;
     private Uri Image_uri;
     private EditText aboutPlace;
-
-
+    private Toolbar toolbar;
     private StorageReference mStorageRef;
     private DatabaseReference mDatabaseRef;
     private StorageTask mUploadTask;
@@ -64,11 +64,22 @@ public class Add_Image_Fragment extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_add__image_);
+        // getting toolbar and setting the name in toolbar
+        toolbar = findViewById(R.id.add_image_toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("Image Upload");
+        //Handling Up-button in App-Bar
+        toolbar.setNavigationIcon(R.drawable.ic_back_arrow); // Set the icon
+        // Icon click listener
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
 
         //spinner
         Spinner Spinner = findViewById(R.id.spinner);
-
-
         // Create an ArrayAdapter using the string array and a default spinner
         ArrayAdapter<CharSequence> staticAdapter = ArrayAdapter
                 .createFromResource(getApplicationContext(), R.array.category_array,
@@ -77,7 +88,6 @@ public class Add_Image_Fragment extends AppCompatActivity {
         // Specify the layout to use when the list of choices appears
         staticAdapter
                 .setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
         // Apply the adapter to the spinner
         Spinner.setAdapter(staticAdapter);
 

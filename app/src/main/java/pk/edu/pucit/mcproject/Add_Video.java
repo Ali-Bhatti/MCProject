@@ -212,8 +212,6 @@ public class Add_Video extends AppCompatActivity {
             //mVideoView.setBackgroundColor(Color.TRANSPARENT);
 
            MediaController mediaController=new MediaController(this);
-           // mVideoView.setMediaController(mediaController);
-          //  mediaController.setAnchorView(mVideoView);
             mVideoView.setMediaController(mediaController);
             mediaController.setAnchorView(mVideoView);
            // mVideoView.setZOrderOnTop(true);

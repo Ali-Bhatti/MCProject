@@ -15,8 +15,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".MainActivity" />
-        <activity android:name=".show_uploaded_videos" />
-        <activity android:name=".Show_Uploaded_Images" />
+        <activity android:name=".show_uploaded_videos" android:screenOrientation="portrait" />
+        <activity android:name=".Show_Uploaded_Images" android:screenOrientation="portrait" />
         <activity android:name=".SignUpActivity" />
         <activity android:name=".LogInActivity" />
         <activity
@@ -30,9 +30,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Add_Image_Fragment" />
-        <activity android:name=".Add_Video" />
-        <meta-data
+        <activity android:name=".Add_Image_Fragment" android:screenOrientation="portrait" />
+        <activity android:name=".Add_Video" android:screenOrientation="portrait" /><meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
     </application>

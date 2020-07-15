@@ -9,13 +9,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.Fragment;
 
 import android.os.Handler;
-import android.os.PersistableBundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.webkit.MimeTypeMap;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -38,7 +34,6 @@ import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
-import static android.app.Activity.RESULT_OK;
 //Activity ha
 public class Add_Image_Fragment extends AppCompatActivity {
 
@@ -48,8 +43,8 @@ public class Add_Image_Fragment extends AppCompatActivity {
     private Button mButtonUpload;
     private Button mButtonShowUploads;
     private String category;
-    private String UserNAme = "Usman";
-    private String UserEmail = "Usman@gmail.com";
+    private String UserName ;
+    private String UserEmail;
     private EditText PlaceName;
     private ImageView mImageView;
     private ProgressBar mProgressBar;
@@ -63,7 +58,7 @@ public class Add_Image_Fragment extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_add__image_);
+        setContentView(R.layout.activity_upload__image_);
         // getting toolbar and setting the name in toolbar
         toolbar = findViewById(R.id.add_image_toolbar);
         setSupportActionBar(toolbar);
@@ -99,6 +94,11 @@ public class Add_Image_Fragment extends AppCompatActivity {
         aboutPlace = findViewById(R.id.txtWriteSomething);
         mButtonShowUploads = findViewById(R.id.btn_show_uploads);
         category = Spinner.getSelectedItem().toString();
+        SessionManagement sessionManagement=new SessionManagement(getApplicationContext());
+        UserEmail=sessionManagement.getSession();
+        DatabaseHelper databaseHelper=new DatabaseHelper(getApplicationContext());
+        UserName=databaseHelper.getName(UserEmail);
+
 
         mStorageRef = FirebaseStorage.getInstance().getReference("Images");
         mDatabaseRef = FirebaseDatabase.getInstance().getReference("Images");
@@ -138,7 +138,7 @@ public class Add_Image_Fragment extends AppCompatActivity {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_add__image_, container, false);
+        View view = inflater.inflate(R.layout.activity_upload__image_, container, false);
 
         //spinner
         Spinner Spinner = view.findViewById(R.id.spinner);
@@ -251,7 +251,7 @@ public class Add_Image_Fragment extends AppCompatActivity {
                                             //next work with URL
                                             Toast.makeText(getApplicationContext(), "Upload successful", Toast.LENGTH_LONG).show();
                                             Upload upload = new Upload(PlaceName.getText().toString().trim(),
-                                                  fileLink, category, UserNAme, UserEmail, aboutPlace.getText().toString().trim());
+                                                  fileLink, category, UserName, UserEmail, aboutPlace.getText().toString().trim());
 
                                             String uploadId = mDatabaseRef.push().getKey();
                                             mDatabaseRef.child(uploadId).setValue(upload);

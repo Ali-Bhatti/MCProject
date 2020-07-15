@@ -29,13 +29,14 @@ import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoViewHolder> {
 
     private Context mContext;
     private List<Upload> mUploads;
-    public SimpleExoPlayer exoplayer;
+    public List<SimpleExoPlayer> exoplayer=new ArrayList<SimpleExoPlayer>();
 
 
     public VideoAdapter(Context context, List<Upload> uploads) {
@@ -67,13 +68,13 @@ class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoViewHolder> {
 
             BandwidthMeter bandwidthMeter = new DefaultBandwidthMeter.Builder(mContext).build();
             TrackSelector trackSelector = new DefaultTrackSelector(new AdaptiveTrackSelection.Factory(bandwidthMeter));
-            exoplayer = (SimpleExoPlayer) ExoPlayerFactory.newSimpleInstance(mContext);
+            exoplayer.add((SimpleExoPlayer) ExoPlayerFactory.newSimpleInstance(mContext));
             DefaultHttpDataSourceFactory dataSourceFactory = new DefaultHttpDataSourceFactory("Videos");
             ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
             MediaSource mediaSource = new ExtractorMediaSource(myUri, dataSourceFactory, extractorsFactory, null, null);
-            holder.playerView.setPlayer(exoplayer);
-            exoplayer.prepare(mediaSource);
-            exoplayer.setPlayWhenReady(false);
+            holder.playerView.setPlayer(exoplayer.get(position));
+            exoplayer.get(position).prepare(mediaSource);
+            exoplayer.get(position).setPlayWhenReady(false);
 
 
         } catch (Exception e) {
@@ -107,12 +108,15 @@ class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoViewHolder> {
     }
 
     public void stopPlayback() {
+        for(int i=0;i<exoplayer.size();i++) {
 
-        if (exoplayer != null) {
-            exoplayer.setPlayWhenReady(false);
-            exoplayer.stop();
-            exoplayer.release();
-            exoplayer.seekTo(0);
+            if (exoplayer.get(i) != null) {
+                SimpleExoPlayer simpleExoPlayer=exoplayer.get(i);
+                simpleExoPlayer.setPlayWhenReady(false);
+                simpleExoPlayer.stop();
+                simpleExoPlayer.release();
+                simpleExoPlayer.seekTo(0);
+            }
         }
        // exoplayer.setPlayWhenReady(false);
     }

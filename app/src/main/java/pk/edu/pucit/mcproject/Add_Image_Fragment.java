@@ -58,7 +58,7 @@ public class Add_Image_Fragment extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_upload__image_);
+        setContentView(R.layout.fragment_add__image_);
         // getting toolbar and setting the name in toolbar
         toolbar = findViewById(R.id.add_image_toolbar);
         setSupportActionBar(toolbar);

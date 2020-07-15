@@ -57,7 +57,7 @@ public class Add_Video extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_upload__video);
+        setContentView(R.layout.fragment_add__video);
         // getting toolbar and setting the name in toolbar
         toolbar = findViewById(R.id.add_video_toolbar);
         setSupportActionBar(toolbar);

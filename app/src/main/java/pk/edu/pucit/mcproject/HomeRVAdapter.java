@@ -11,11 +11,13 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
+
 public class HomeRVAdapter extends RecyclerView.Adapter<HomeRVAdapter.ViewHolder> {
     private Context context;
-
-    private String [] placeImgs;
-    private String [] placeNames;
+    private ArrayList<PlaceItem> mPlaceItems;
 
     private OnItemClickListener mListener;
 
@@ -32,26 +34,24 @@ public class HomeRVAdapter extends RecyclerView.Adapter<HomeRVAdapter.ViewHolder
             super(itemView);
             placeImg = itemView.findViewById(R.id.placeImg);
             placeName = itemView.findViewById(R.id.placeName);
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (listener != null) {
-                        int position = getAdapterPosition();
-                        if (position != RecyclerView.NO_POSITION) {
-                            listener.onItemClick(position);
-                        }
+            itemView.setOnClickListener(v -> {
+                if (listener != null) {
+                    int position = getAdapterPosition();
+                    if (position != RecyclerView.NO_POSITION) {
+                        listener.onItemClick(position);
                     }
                 }
             });
         }
     }
-    HomeRVAdapter(Context context, String[] placeNames){
+    HomeRVAdapter(Context context, ArrayList<PlaceItem> places){
         this.context = context;
-        this.placeNames = placeNames;
+        this.mPlaceItems = places;
     }
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        // Layout Inflation is done
         // Layout Inflation is done
         View rowView = LayoutInflater.from(context).inflate(R.layout.places_category_layout ,null);
         Log.i("Inflater:" ,"Done" );
@@ -60,12 +60,15 @@ public class HomeRVAdapter extends RecyclerView.Adapter<HomeRVAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.placeName.setText(placeNames[position]);
+        PlaceItem placeItem = mPlaceItems.get(position);
+        holder.placeName.setText(placeItem.getPlaceName());
+        String imageUrl = placeItem.getThumbnail();
+        Picasso.get().load(imageUrl).fit().centerCrop().into(holder.placeImg);
     }
 
     @Override
     public int getItemCount() {
-        return placeNames.length;
+        return mPlaceItems.size();
     }
 
 

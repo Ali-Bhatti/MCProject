@@ -23,6 +23,11 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.RequestQueue;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.material.tabs.TabLayout;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.PermissionToken;
@@ -30,7 +35,9 @@ import com.karumi.dexter.listener.PermissionDeniedResponse;
 import com.karumi.dexter.listener.PermissionGrantedResponse;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.single.PermissionListener;
+import com.squareup.picasso.Picasso;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
@@ -44,31 +51,47 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+
+import static pk.edu.pucit.mcproject.Data.famousPlacesOfCites;
+import static pk.edu.pucit.mcproject.Data.famousPlacesOfCitesUrls;
 
 public class City_details extends AppCompatActivity {
+    public static int IMAGE_DISPLAY_COUNT = 5;
 
-    private ViewPager placeimageviewPager;
+
     private TabLayout viewPagerindicator;
-    private String[] cites = {"Islamabad" ,"Lahore", "Karachi",  "Faisalabad", "Multan", "Hyderabad", "Gujranwala", "Peshawar", "Quetta"};
-    private String[] []famousPlacesOfCites = {{"Faisal Masjid","Centaurus","Daman-e-Koh","The Monal Restaurant","Islamabad Zoo" ,"Lok Virsa Museum","Margalla Hills","Rawal Lake"},
-            {"Badshahi Mosque", "Minar-e-Pakistan", "Lahore Fort", " Bahria Grand Mosque ", "Anarkli", "Masjid wazir khan", "Mochi gate", "Fort Road Food Street"},
-            {"National Museum Karachi","Mazare-e-Quaid","Jehangir Kothari Parade","Masjid-e-Tooba","Clifton Beach","Aziz Bhatti Park","Baba and Bhit Islands"},
-            {"Faisalabad Clock Tower","Faisalabad Railway Station","Gumti_Water_Fountain","Allama Iqbal Library","Chenab Group","Grain elevator","Lyallpur Museum"},
+    //private String[] cites = {"Islamabad" ,"Lahore", "Karachi",  "Faisalabad", "Multan", "Hyderabad", "Gujranwala", "Peshawar", "Quetta"};
+    /*private String[] []famousPlacesOfCites = {
+            {"Faisal Masjid","Centaurus","Daman-e-Koh","The Monal Restaurant","Islamabad Zoo" ,"Lok Virsa Museum","Margalla Hills","Rawal Lake"},
+            {"Badshahi Mosque", "Minar-e-Pakistan", "Lahore Fort", " Bahria Grand Mosque ", "Anarkli Bazar", "Masjid wazir khan", "Mochi gate", "Fort Road Food Street"},
+            {"National Museum Karachi","Mazar-e-Quaid","Jehangir Kothari Parade","Masjid-e-Tooba","Clifton Beach","Aziz Bhatti Park","Baba and Bhit Islands"},
+            {"Faisalabad Clock Tower","Faisalabad Railway Station","Gumti Water Fountain","Allama Iqbal Library","Lyallpur Museum"},
             {"Tomb Shah Rukne Alam","Ghanta Ghar Multan","Tomb Shah Shams Tabrez","Qasim Bagh"},
             {"Market Tower (Ghanta Ghar)", "Mukkhi House" ,"Eidgah Masjid","Pacco Qillo","Tombs of Mirs"},
             {"Ranjeet Singh Haveli" ,"Darziyan Vali Kothi"},
             {"Bala Hisar Fort","Peshawar Museum","Masjid Mahabat Khan","Jamrud Fort","Bab-e-Khyber","Sir Cunningham Clock Tower","Peshawar Zoo","Kanishka Stupa Fort"},
             {"Hanna Lake","Hanna-Urak Waterfall","Askari Park Quetta", "Murdar Mountain"}
-            };
-
+            };*/
+    private ViewPager placeimageviewPager;
     private String AppBarName = "";
     private String encoding = "UTF-8";
     private ProgressBar progressBar;
     private TextView txtWikiData;
     private String keyword;
     private NestedScrollView nestedScrollView;
+    private RecyclerView vrv;
+    private HomeRVAdapter homeRVAdapter;
+    ArrayList<PlaceItem> citiesFamousPlacesItems = new ArrayList<>();
+    ArrayList<String> PlaceImageUrls;
     private int position;
+    private PlaceImageAdapter placeImageAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,12 +102,7 @@ public class City_details extends AppCompatActivity {
         //Setting back button of appbar
         toolbar.setNavigationIcon(R.drawable.ic_back_arrow); // Set the icon
         // Icon click listener
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
+        toolbar.setNavigationOnClickListener(v -> onBackPressed());
         //to get value passed to activity
         Bundle b = getIntent().getExtras();
 
@@ -97,25 +115,29 @@ public class City_details extends AppCompatActivity {
 
         placeimageviewPager=findViewById(R.id.PlaceViewPager);
         viewPagerindicator=findViewById(R.id.view_pager_indicator);
-        List<Integer> PlaceImages=new ArrayList<>();
-        PlaceImages.add(R.drawable.image1);
-        PlaceImages.add((R.drawable.image2));
-        PlaceImages.add((R.drawable.image4));
-
-        PlaceImageAdapter placeImageAdapter=new PlaceImageAdapter(PlaceImages);
+        PlaceImageUrls=new ArrayList<>();
+        placeImageAdapter=new PlaceImageAdapter(PlaceImageUrls);
         placeimageviewPager.setAdapter(placeImageAdapter);
+        String url = "https://bing-image-search1.p.rapidapi.com/images/search?q=" + AppBarName.replace(" ", "%20");
+        OkHttpHandler okHttpHandler= new OkHttpHandler();
+        okHttpHandler.execute(url);
+
         viewPagerindicator.setupWithViewPager(placeimageviewPager,true);
 
 
         //show famous places in a city
-        RecyclerView vrv = findViewById(R.id.rv_vertical1); // vrv:vertical recycler view
+        vrv = findViewById(R.id.rv_vertical1); // vrv:vertical recycler view
         GridLayoutManager gridLayoutManager=new GridLayoutManager(this, 3);
         vrv.setLayoutManager(gridLayoutManager);
-
         vrv.setHasFixedSize(true);
-        HomeRVAdapter homeRVAdapter1 = new HomeRVAdapter(this, famousPlacesOfCites[position]);
-        vrv.setAdapter(homeRVAdapter1);
-        homeRVAdapter1.setOnItemClickListener(new HomeRVAdapter.OnItemClickListener() {
+
+        for(int i = 0 ; i < famousPlacesOfCites[position].length;i++){
+            citiesFamousPlacesItems.add(new PlaceItem(famousPlacesOfCites[position][i], famousPlacesOfCitesUrls[position][i]));
+        }
+
+        homeRVAdapter = new HomeRVAdapter(this, citiesFamousPlacesItems);
+        vrv.setAdapter(homeRVAdapter);
+        homeRVAdapter.setOnItemClickListener(new HomeRVAdapter.OnItemClickListener() {
             int pos = position;
             @Override
             public void onItemClick(int position) {
@@ -235,7 +257,6 @@ public class City_details extends AppCompatActivity {
         return null;
     }
 
-
     private void PrintOnLog(String tag , String message){
         Log.i(tag,message);
     }
@@ -284,4 +305,52 @@ public class City_details extends AppCompatActivity {
         mapIntent.setPackage("com.google.android.apps.maps");
         startActivity(mapIntent);
     }
+
+    public class OkHttpHandler extends AsyncTask<String , Void , String> {
+
+        OkHttpClient client = new OkHttpClient();
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            okhttp3.Request.Builder builder  = new okhttp3.Request.Builder()
+                    .addHeader("x-rapidapi-host", "bing-image-search1.p.rapidapi.com")
+                    .addHeader("x-rapidapi-key", "6f4a09b0b9msh9683c62eff965e5p16d1c3jsn5a261aa97615")
+                    .url(params[0]);
+            Request request = builder.build();
+
+            try {
+                Response response = client.newCall(request).execute();
+                return response.body().string();
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+            return null;
+        }
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            try {
+                // making a json object
+                JSONObject jsonObject = new JSONObject(s);
+                // getting an array of json objects with key "value"
+                JSONArray value = jsonObject.getJSONArray("value");
+                //extracting one JSON object from JSON Array
+                for (int i = 0; i < IMAGE_DISPLAY_COUNT; i++) {
+                    JSONObject obj1 = value.getJSONObject(i);
+                    String Url = obj1.getString("contentUrl");
+                    PlaceImageUrls.add(Url);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            placeImageAdapter.notifyDataSetChanged();
+
+        }
+    }
+
 }

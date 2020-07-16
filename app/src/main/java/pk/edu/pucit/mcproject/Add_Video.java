@@ -3,7 +3,6 @@ package pk.edu.pucit.mcproject;
 import android.Manifest;
 import android.content.ContentResolver;
 import android.content.Intent;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -11,17 +10,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.Fragment;
 
 import android.os.Handler;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.webkit.MimeTypeMap;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.MediaController;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
@@ -49,6 +44,7 @@ import com.squareup.picasso.Picasso;
 
 import static android.app.Activity.RESULT_OK;
 
+
 public class Add_Video extends AppCompatActivity {
 
 
@@ -57,7 +53,7 @@ public class Add_Video extends AppCompatActivity {
     private Button mButtonUpload;
     private Button mButtonShowUploads;
     private String category;
-    private String UserNAme = "Usman";
+    private String UserName = "Usman";
     private String UserEmail = "Usman@gmail.com";
     private EditText PlaceName;
     private VideoView mVideoView;
@@ -112,6 +108,11 @@ public class Add_Video extends AppCompatActivity {
         aboutPlace = findViewById(R.id.txtWriteSomething);
         mButtonShowUploads =findViewById(R.id.btn_show_uploads);
         category = Spinner.getSelectedItem().toString();
+
+        SessionManagement sessionManagement=new SessionManagement(getApplicationContext());
+        UserEmail=sessionManagement.getSession();
+        DatabaseHelper databaseHelper=new DatabaseHelper(getApplicationContext());
+        UserName=databaseHelper.getName(UserEmail);
         // mVideoView.setVisibility(View.VISIBLE);
 
         mStorageRef = FirebaseStorage.getInstance().getReference("Videos");
@@ -173,7 +174,7 @@ public class Add_Video extends AppCompatActivity {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view= inflater.inflate(R.layout.fragment_add__video, container, false);
+        View view= inflater.inflate(R.layout.activity_upload__video, container, false);
 //spinner
         Spinner Spinner = view.findViewById(R.id.spinner);
 
@@ -295,7 +296,7 @@ public class Add_Video extends AppCompatActivity {
                                             //next work with URL
                                             Toast.makeText(getApplicationContext(), "Upload successful", Toast.LENGTH_LONG).show();
                                             Upload upload = new Upload(PlaceName.getText().toString().trim(),
-                                                    fileLink, category, UserNAme, UserEmail, aboutPlace.getText().toString().trim());
+                                                    fileLink, category, UserName, UserEmail, aboutPlace.getText().toString().trim());
 
                                             String uploadId = mDatabaseRef.push().getKey();
                                             mDatabaseRef.child(uploadId).setValue(upload);

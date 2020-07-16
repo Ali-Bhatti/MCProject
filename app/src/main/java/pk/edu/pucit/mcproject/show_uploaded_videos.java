@@ -108,7 +108,8 @@ public class show_uploaded_videos extends AppCompatActivity {
     protected void onPause() {
 
         super.onPause();
-        pausePlayer(mAdapter.exoplayer);
+        //pausePlayer(mAdapter.exoplayer);
+        mAdapter.stopPlayback();
 
     }
 
@@ -116,7 +117,8 @@ public class show_uploaded_videos extends AppCompatActivity {
     protected void onStop() {
 
         super.onStop();
-        pausePlayer(mAdapter.exoplayer);
+      //  pausePlayer(mAdapter.exoplayer);
+        mAdapter.stopPlayback();
 
     }
 
@@ -124,14 +126,14 @@ public class show_uploaded_videos extends AppCompatActivity {
     protected void onDestroy() {
 
         super.onDestroy();
-        releaseExoPlayer(mAdapter.exoplayer);
+       // releaseExoPlayer(mAdapter.exoplayer);
     }
 
     @Override
     protected void onResume() {
 
         super.onResume();
-        startPlayer(mAdapter.exoplayer);
+       // startPlayer(mAdapter.exoplayer);
     }
     public static void startPlayer(SimpleExoPlayer exoPlayer) {
 

@@ -7,6 +7,39 @@
     tools:context=".Contribute">
 
     <Button
+        android:id="@+id/btn_uploaded_Videos"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:background="@drawable/round_button_outline"
+        android:text="Uploaded Video"
+        android:textColor="@color/txtColor"
+        android:textSize="22sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/btn_Add_Image"
+        app:layout_constraintStart_toStartOf="@+id/btn_Add_Image"
+        app:layout_constraintTop_toBottomOf="@+id/btn_uploaded_Images"
+        app:layout_constraintVertical_bias="0.11" />
+
+    <Button
+        android:id="@+id/btn_uploaded_Images"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:background="@drawable/round_button_outline"
+        android:text="Uploaded Image"
+        android:textColor="@color/txtColor"
+        android:textSize="22sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_Add_Video"
+        app:layout_constraintVertical_bias="0.12" />
+
+    <Button
         android:id="@+id/btn_Add_Image"
         android:layout_width="match_parent"
         android:layout_height="60dp"
@@ -21,7 +54,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.681" />
+        app:layout_constraintVertical_bias="0.24" />
 
     <Button
         android:id="@+id/btn_Add_Video"
@@ -38,7 +71,7 @@
         app:layout_constraintHorizontal_bias="0.4"
         app:layout_constraintStart_toStartOf="@+id/btn_Add_Image"
         app:layout_constraintTop_toBottomOf="@+id/btn_Add_Image"
-        app:layout_constraintVertical_bias="0.084" />
+        app:layout_constraintVertical_bias="0.047" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

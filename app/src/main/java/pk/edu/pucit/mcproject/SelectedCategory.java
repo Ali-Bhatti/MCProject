@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ import java.util.Objects;
 
 import static pk.edu.pucit.mcproject.Data.categoryUrls;
 import static pk.edu.pucit.mcproject.Data.categorys;
+import static pk.edu.pucit.mcproject.Home.isConnected;
 
 public class SelectedCategory extends AppCompatActivity {
 
@@ -118,22 +120,27 @@ public class SelectedCategory extends AppCompatActivity {
 
             @Override
             public void onItemClick(int position) {
-                //here corresponding activity will be opened
-                if(pos == 0) {
-                    Intent intent = new Intent(getApplicationContext(),City_details.class);
-                    intent.putExtra("AppBarTitle",details[pos][position]);
-                    intent.putExtra("position",position);
-                    startActivity(intent);
-                    //makeToast(details[pos][position], true);
-                }else{
-                    Intent intent = new Intent(getApplicationContext(),PlaceDetailActivity.class);
-                    intent.putExtra("AppBarTitle",details[pos][position]);
-                    startActivity(intent);
+                if(!isConnected(getApplicationContext())){
+                    Toast.makeText(getApplicationContext(), "Internet Connection Problem.\n Check your Internet Connection.", Toast.LENGTH_SHORT).show();
+                }else {
+                    //here corresponding activity will be opened
+                    if (pos == 0) {
+                        Intent intent = new Intent(getApplicationContext(), City_details.class);
+                        intent.putExtra("AppBarTitle", details[pos][position]);
+                        intent.putExtra("position", position);
+                        startActivity(intent);
+                        //makeToast(details[pos][position], true);
+                    } else {
+                        Intent intent = new Intent(getApplicationContext(), PlaceDetailActivity.class);
+                        intent.putExtra("AppBarTitle", details[pos][position]);
+                        startActivity(intent);
+                    }
                 }
             }
         });
 
     }
+
     private void makeToast(String MSG, Boolean duration) {
         Toast.makeText(this, MSG, duration ? Toast.LENGTH_SHORT : Toast.LENGTH_LONG).show();
     }

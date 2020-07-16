@@ -45,9 +45,7 @@ public class Profile extends Fragment {
         final String useremail=sessionManagement.getSession();
         String uname=db.getName(useremail);
         TextView myTextView1 =  view.findViewById (R.id.profNameBox);
-        myTextView1.setText(uname);
-        TextView myTextView2 =  view.findViewById (R.id.profEmailBox);
-        myTextView2.setText(useremail);
+        myTextView1.setText("Name: " + uname);
         Button logoutBtn = view.findViewById(R.id.profLogoutButton);
         logoutBtn.setOnClickListener(new View.OnClickListener() {
             @Override

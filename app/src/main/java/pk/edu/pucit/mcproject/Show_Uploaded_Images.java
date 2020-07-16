@@ -1,11 +1,13 @@
 package pk.edu.pucit.mcproject;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -26,14 +28,25 @@ public class Show_Uploaded_Images extends AppCompatActivity {
     private ProgressBar mProgressCircle;
     private DatabaseReference mDatabaseRef;
     private List<Upload> mUploads;
+    private Toolbar toolbar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show__uploaded__images);
+        //setting your ow toolbar
+        toolbar = findViewById(R.id.uploaded_images_toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("Uploaded Images");
+        toolbar.setNavigationIcon(R.drawable.ic_back_arrow);
+        toolbar.setNavigationOnClickListener(v -> onBackPressed());
+
         mRecyclerView = findViewById(R.id.RecyclerView);
-       mRecyclerView.setHasFixedSize(true);
-       mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-       mProgressCircle = findViewById(R.id.progress_circle);
+        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mProgressCircle = findViewById(R.id.progress_circle);
+        if(!Home.isConnected(getApplicationContext())){
+            Toast.makeText(this, "Internet Connection Problem.\n Check your Internet Connection.", Toast.LENGTH_SHORT).show();
+        }
         //GridLayoutManager gridLayoutManager=new GridLayoutManager(this, 3);
         //mRecyclerView.setLayoutManager(gridLayoutManager);
         mUploads = new ArrayList<>();
@@ -49,6 +62,7 @@ public class Show_Uploaded_Images extends AppCompatActivity {
                 mRecyclerView.setAdapter(mAdapter);
                 mProgressCircle.setVisibility(View.INVISIBLE);
             }
+
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 Toast.makeText(Show_Uploaded_Images.this, databaseError.getMessage(), Toast.LENGTH_SHORT).show();

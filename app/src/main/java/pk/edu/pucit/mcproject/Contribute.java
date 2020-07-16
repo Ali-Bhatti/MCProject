@@ -65,17 +65,40 @@ public class Contribute extends Fragment {
                 Intent intent = new Intent(getActivity(),Add_Video.class);
                 startActivity(intent);
             }
-            /*public Add_Image_Fragment newInstance(String Place_Name) {
-                Add_Image_Fragment fragment = new Add_Image_Fragment();
-                Bundle args = new Bundle();
-                args.putString(placeName.getText().toString(), Place_Name);
-                fragment.setArguments(args);
-                return fragment;
-            }*/
-
         });
+        Button btn_uploaded_images = view.findViewById(R.id.btn_uploaded_Images);
+        btn_uploaded_images.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(),Show_Uploaded_Images.class);
+                startActivity(intent);
+            }
+        });
+        Button btn_uploaded_videos = view.findViewById(R.id.btn_uploaded_Videos);
+        btn_uploaded_videos.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(),show_uploaded_videos.class);
+                startActivity(intent);
+            }
+        });
+
 
 
         return view;
     }
+    /*void showUploadedItems(View view){
+        Intent intent;
+        switch (view.getId()) {
+            case R.id.btn_uploaded_Images:
+                intent = new Intent(getContext(),Show_Uploaded_Images.class);
+                break;
+            case R.id.btn_uploaded_Videos:
+                intent = new Intent(getContext(),show_uploaded_videos.class);
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + view.getId());
+        }
+        startActivity(intent);
+    }*/
 }

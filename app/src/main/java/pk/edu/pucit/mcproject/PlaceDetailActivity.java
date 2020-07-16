@@ -201,7 +201,8 @@ public class PlaceDetailActivity extends AppCompatActivity {
             super.onPostExecute(formattedData);
             progressBar.setVisibility(View.GONE);
            if(formattedData.equals("No Internet Connection")){
-               Toast.makeText(getApplicationContext(), formattedData, Toast.LENGTH_SHORT).show();
+               progressBar.setVisibility(View.VISIBLE);
+               Toast.makeText(getApplicationContext(), "Internet Connection Problem.\n Check your Internet Connection.", Toast.LENGTH_SHORT).show();
            }
            else {
                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -249,6 +250,7 @@ public class PlaceDetailActivity extends AppCompatActivity {
         }
 
     }
+
     public void openGoogleMap(final View view) {
         final String placeName = AppBarName;
 
@@ -279,6 +281,7 @@ public class PlaceDetailActivity extends AppCompatActivity {
                     }
                 }).check();
     }
+
     private void PrintOnLog(String tag , String message){
         Log.i(tag,message);
     }

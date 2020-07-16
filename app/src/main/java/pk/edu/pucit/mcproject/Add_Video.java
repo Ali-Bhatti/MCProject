@@ -1,5 +1,6 @@
 package pk.edu.pucit.mcproject;
 
+import android.Manifest;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.net.Uri;
@@ -33,6 +34,16 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.PermissionDeniedResponse;
+import com.karumi.dexter.listener.PermissionGrantedResponse;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.single.PermissionListener;
+import com.squareup.picasso.Picasso;
+
+import static android.app.Activity.RESULT_OK;
+
 
 public class Add_Video extends AppCompatActivity {
 
@@ -111,7 +122,23 @@ public class Add_Video extends AppCompatActivity {
         mButtonChooseVideo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openFileChooser();
+                Dexter.withContext(getApplicationContext()).withPermission(Manifest.permission.READ_EXTERNAL_STORAGE).withListener(new PermissionListener() {
+                    @Override
+                    public void onPermissionGranted(PermissionGrantedResponse permissionGrantedResponse) {
+                        openFileChooser();
+                    }
+
+                    @Override
+                    public void onPermissionDenied(PermissionDeniedResponse permissionDeniedResponse) {
+                        Toast.makeText(Add_Video.this, "Storage Read Permission Denied", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onPermissionRationaleShouldBeShown(PermissionRequest permissionRequest, PermissionToken permissionToken) {
+                        permissionToken.continuePermissionRequest();
+                    }
+                }).check();
+
             }
         });
 
@@ -127,11 +154,15 @@ public class Add_Video extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                String text = " Upload in progress";
-                if (mUploadTask != null && mUploadTask.isInProgress()) {
-                    Toast.makeText(getApplicationContext(), "Upload in progress", Toast.LENGTH_SHORT).show();
-                } else {
-                    uploadFile();
+                if(!Home.isConnected(getApplicationContext())){
+                    Toast.makeText(Add_Video.this, "Internet Connection Problem.\n Check your Internet Connection.", Toast.LENGTH_SHORT).show();
+                }else {
+                    String text = " Upload in progress";
+                    if (mUploadTask != null && mUploadTask.isInProgress()) {
+                        Toast.makeText(getApplicationContext(), "Upload in progress", Toast.LENGTH_SHORT).show();
+                    } else {
+                        uploadFile();
+                    }
                 }
             }
         });

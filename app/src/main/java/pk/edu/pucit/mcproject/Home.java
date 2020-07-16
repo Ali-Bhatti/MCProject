@@ -47,8 +47,8 @@ public class Home extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         progressBarVrv = view.findViewById(R.id.home_vrv_progressBar);
-        if(!isConnected()){
-            Toast.makeText(getContext(), "Internet Connection Problem. Check your Internet Connection.", Toast.LENGTH_SHORT).show();
+        if(!isConnected(getContext())){
+            Toast.makeText(getContext(), "Internet Connection Problem.\n Check your Internet Connection.", Toast.LENGTH_SHORT).show();
             return view;
         }
         progressBarVrv.setVisibility(View.GONE);
@@ -65,10 +65,14 @@ public class Home extends Fragment {
         hrv.setAdapter(homeRVAdapter);
         homeRVAdapter.setOnItemClickListener(position -> {
             Log.i("Pressed", categorys[position]);
-            //changing title of appbar according to category selected
-            Intent intent = new Intent(getContext(),SelectedCategory.class);
-            intent.putExtra("Position",position); // passing value to activity
-            startActivity(intent);
+            if(!isConnected(getContext())){
+                Toast.makeText(getContext(), "Internet Connection Problem.\n Check your Internet Connection.", Toast.LENGTH_SHORT).show();
+            }else {
+                //changing title of appbar according to category selected
+                Intent intent = new Intent(getContext(), SelectedCategory.class);
+                intent.putExtra("Position", position); // passing value to activity
+                startActivity(intent);
+            }
         });
 
         // Second Recycler View
@@ -82,10 +86,14 @@ public class Home extends Fragment {
         homeRVAdapter1 = new HomeRVAdapter(getContext(), famousPlacesItems);
         vrv.setAdapter(homeRVAdapter1);
         homeRVAdapter1.setOnItemClickListener(position -> {
-            //here corresponding activity will be opened
-            Intent intent = new Intent(getContext() , PlaceDetailActivity.class);
-            intent.putExtra("AppBarTitle" , famousPlaces[position]);
-            startActivity(intent);
+            if(!isConnected(getContext())){
+                Toast.makeText(getContext(), "Internet Connection Problem.\n Check your Internet Connection.", Toast.LENGTH_SHORT).show();
+            }else {
+                //here corresponding activity will be opened
+                Intent intent = new Intent(getContext(), PlaceDetailActivity.class);
+                intent.putExtra("AppBarTitle", famousPlaces[position]);
+                startActivity(intent);
+            }
         });
 
         hrv.setNestedScrollingEnabled(false);
@@ -98,10 +106,10 @@ public class Home extends Fragment {
         listView.setAdapter(arrayAdapter);*/
         return view;
     }
-    public boolean isConnected() {
+    public static boolean isConnected(Context context) {
         boolean connected = false;
         try {
-            ConnectivityManager cm = (ConnectivityManager)getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+            ConnectivityManager cm = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
             NetworkInfo nInfo = cm.getActiveNetworkInfo();
             connected = nInfo != null && nInfo.isAvailable() && nInfo.isConnected();
             return connected;

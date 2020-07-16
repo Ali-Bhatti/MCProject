@@ -48,6 +48,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.InetAddress;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -61,6 +62,7 @@ import okhttp3.Response;
 
 import static pk.edu.pucit.mcproject.Data.famousPlacesOfCites;
 import static pk.edu.pucit.mcproject.Data.famousPlacesOfCitesUrls;
+import static pk.edu.pucit.mcproject.Home.isConnected;
 
 public class City_details extends AppCompatActivity {
     public static int IMAGE_DISPLAY_COUNT = 5;
@@ -141,10 +143,14 @@ public class City_details extends AppCompatActivity {
             int pos = position;
             @Override
             public void onItemClick(int position) {
-                //here corresponding activity will be opened
-                Intent intent = new Intent(getApplicationContext(), PlaceDetailActivity.class);
-                intent.putExtra("AppBarTitle" , famousPlacesOfCites[pos][position]);
-                startActivity(intent);
+                if(!isConnected(getApplicationContext())){
+                    Toast.makeText(getApplicationContext(), "Internet Connection Problem.\n Check your Internet Connection.", Toast.LENGTH_SHORT).show();
+                }else {
+                    //here corresponding activity will be opened
+                    Intent intent = new Intent(getApplicationContext(), PlaceDetailActivity.class);
+                    intent.putExtra("AppBarTitle", famousPlacesOfCites[pos][position]);
+                    startActivity(intent);
+                }
 
             }
         });
@@ -195,6 +201,9 @@ public class City_details extends AppCompatActivity {
         @Override
         protected String doInBackground(String[] params) {
             try {
+                if(!isInternetAvailable()){
+                    return "No Internet Connection";
+                }
                 String sURL = params[0];
 
                 URL url = new URL(sURL);        // Convert String URL to java.net.URL
@@ -228,15 +237,19 @@ public class City_details extends AppCompatActivity {
         protected void onPostExecute(String formattedData) {
             super.onPostExecute(formattedData);
             progressBar.setVisibility(View.GONE);
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                // HTML Data
-                txtWikiData.setText(Html.fromHtml
-                        (formattedData, Html.FROM_HTML_MODE_LEGACY));
-            } else {
-                // HTML Data
-                Spanned data = Html.fromHtml(formattedData);
-                txtWikiData.setText(data);
+            if(formattedData.equals("No Internet Connection")){
+                progressBar.setVisibility(View.VISIBLE);
+                Toast.makeText(getApplicationContext(), "Internet Connection Problem.\n Check your Internet Connection.", Toast.LENGTH_SHORT).show();
+            }else {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    // HTML Data
+                    txtWikiData.setText(Html.fromHtml
+                            (formattedData, Html.FROM_HTML_MODE_LEGACY));
+                } else {
+                    // HTML Data
+                    Spanned data = Html.fromHtml(formattedData);
+                    txtWikiData.setText(data);
+                }
             }
         }
     }
@@ -291,6 +304,7 @@ public class City_details extends AppCompatActivity {
                     }
                 }).check();
     }
+
     private void LoadGoogleMap(String placeName, boolean isResturant) {
         Uri gmmIntentUri = isResturant ? Uri.parse("geo:0,0?q=restaurants " + placeName + ", Pakistan") : Uri.parse("google.navigation:q=" + placeName + ", Pakistan");
         loadMapHelper(gmmIntentUri);
@@ -353,4 +367,18 @@ public class City_details extends AppCompatActivity {
         }
     }
 
+    public boolean isInternetAvailable() {
+        try {
+            InetAddress ipAddr = InetAddress.getByName("google.com"); //You can replace it with your name
+            if (ipAddr.equals("")) {
+                return false;
+            } else {
+                return true;
+            }
+
+        } catch (Exception e) {
+            return false;
+        }
+
+    }
 }

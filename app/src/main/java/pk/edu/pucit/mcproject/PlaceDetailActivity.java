@@ -32,6 +32,7 @@ import com.karumi.dexter.listener.PermissionGrantedResponse;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.single.PermissionListener;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
@@ -52,6 +53,12 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+
+import static pk.edu.pucit.mcproject.City_details.IMAGE_DISPLAY_COUNT;
+
 
 public class PlaceDetailActivity extends AppCompatActivity {
     private ViewPager placeImageViewPager;
@@ -62,6 +69,9 @@ public class PlaceDetailActivity extends AppCompatActivity {
     private static final String encoding = "UTF-8";
     private ProgressBar progressBar;
     private NestedScrollView nestedScrollView;
+    private ArrayList<String> PlaceImageUrls;
+    private PlaceImageAdapter placeImageAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,13 +97,17 @@ public class PlaceDetailActivity extends AppCompatActivity {
 
         placeImageViewPager = findViewById(R.id.PlaceViewPager);
         viewPagerIndicator = findViewById(R.id.view_pager_indicator);
-        List<Integer> PlaceImages = new ArrayList<>();
-        PlaceImages.add(R.drawable.image1);
-        PlaceImages.add((R.drawable.image2));
-        PlaceImages.add((R.drawable.image4));
+        PlaceImageUrls=new ArrayList<>();
 
-        PlaceImageAdapter placeImageAdapter = new PlaceImageAdapter(PlaceImages);
+        placeImageAdapter=new PlaceImageAdapter(PlaceImageUrls);
         placeImageViewPager.setAdapter(placeImageAdapter);
+        if(AppBarName.equals("Murdar Mountain"))
+            AppBarName = AppBarName + "Quetta";
+
+        String url = "https://bing-image-search1.p.rapidapi.com/images/search?q=" + AppBarName.replace(" ", "%20");
+        OkHttpHandler okHttpHandler = new OkHttpHandler();
+        okHttpHandler.execute(url);
+
         viewPagerIndicator.setupWithViewPager(placeImageViewPager, true);
 
         txtWikiData = findViewById(R.id.txt_city_detail);
@@ -220,6 +234,7 @@ public class PlaceDetailActivity extends AppCompatActivity {
 
         return null;
     }
+
     public boolean isInternetAvailable() {
         try {
             InetAddress ipAddr = InetAddress.getByName("google.com"); //You can replace it with your name
@@ -281,5 +296,53 @@ public class PlaceDetailActivity extends AppCompatActivity {
         Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
         mapIntent.setPackage("com.google.android.apps.maps");
         startActivity(mapIntent);
+    }
+
+    public class OkHttpHandler extends AsyncTask<String , Void , String> {
+
+        OkHttpClient client = new OkHttpClient();
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            okhttp3.Request.Builder builder = new okhttp3.Request.Builder()
+                    .addHeader("x-rapidapi-host", "bing-image-search1.p.rapidapi.com")
+                    .addHeader("x-rapidapi-key", "6f4a09b0b9msh9683c62eff965e5p16d1c3jsn5a261aa97615")
+                    .url(params[0]);
+            Request request = builder.build();
+
+            try {
+                Response response = client.newCall(request).execute();
+                return response.body().string();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            try {
+                // making a json object
+                JSONObject jsonObject = new JSONObject(s);
+                // getting an array of json objects with key "value"
+                JSONArray value = jsonObject.getJSONArray("value");
+                //extracting one JSON object from JSON Array
+                for (int i = 0; i < IMAGE_DISPLAY_COUNT; i++) {
+                    JSONObject obj1 = value.getJSONObject(i);
+                    String Url = obj1.getString("contentUrl");
+                    PlaceImageUrls.add(Url);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            placeImageAdapter.notifyDataSetChanged();
+
+        }
     }
 }

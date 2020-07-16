@@ -19,10 +19,12 @@
     <string name="famous_places">Famous Places</string>
     <string name="profile">Profile</string>
     <array name="category_array">
-        <item>Hill station</item>
-        <item>sea view</item>
-        <item>ancient places</item>
-        <item>citiese</item>
+        <item>Hill Station</item>
+        <item>Sea View</item>
+        <item>Ancient Places</item>
+        <item>City</item>
+        <item>Valley</item>
+        <item>Desert</item>
     </array>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

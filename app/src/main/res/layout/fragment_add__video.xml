@@ -32,17 +32,22 @@
 
             <EditText
                 android:id="@+id/Place_Name"
-                android:layout_width="206dp"
+                android:layout_width="0dp"
                 android:layout_height="47dp"
                 android:layout_marginStart="31dp"
                 android:layout_marginTop="68dp"
                 android:layout_marginEnd="10dp"
+                android:background="@drawable/border"
                 android:editable="true"
                 android:ems="10"
-
+                android:textSize="8pt"
                 android:hint="Enter Place Name"
                 android:inputType="textPersonName"
+                android:textAlignment="center"
+                android:textColor="@color/colorPrimary"
+                android:textColorHint="@color/colorPrimaryDark"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toEndOf="@+id/txtPlaceName"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -50,28 +55,31 @@
                 android:id="@+id/txtPlaceName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="80dp"
-
+                android:layout_marginTop="76dp"
                 android:text="Place Name:"
+                android:textColor="@color/colorPrimaryDark"
                 android:textSize="20sp"
 
                 android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.046"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <Spinner
                 android:id="@+id/spinner"
                 style="@style/TextAppearance.AppCompat.Widget.DropDownItem"
-                android:layout_width="200dp"
+                android:layout_width="0dp"
                 android:layout_height="30dp"
                 android:layout_marginStart="65dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="10dp"
-
                 android:autofillHints="category"
-                android:background="@color/Gray"
+                android:background="@drawable/spinner_style"
+                android:scrollbarSize="5dp"
+                android:singleLine="true"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toEndOf="@+id/textView3"
                 app:layout_constraintTop_toBottomOf="@+id/Place_Name" />
 
@@ -79,12 +87,13 @@
                 android:id="@+id/textView3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="26dp"
+                android:layout_marginTop="32dp"
                 android:text="Category"
+                android:textColor="@color/colorPrimaryDark"
                 android:textSize="20sp"
-
                 android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.059"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/txtPlaceName" />
 
@@ -96,6 +105,9 @@
                 android:layout_marginTop="32dp"
                 android:layout_marginRight="10dp"
                 android:editable="true"
+                android:textSize="8pt"
+                android:textColorHint="@color/colorPrimaryDark"
+                android:textColor="@color/colorPrimary"
                 android:hint="Write something about this place"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -120,10 +132,12 @@
 
             <Button
                 android:id="@+id/btn_Browse_Video"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="155dp"
+                android:layout_height="45dp"
                 android:layout_marginTop="28dp"
                 android:text="Browse Video"
+                android:textColor="@color/txtColor"
+                android:background="@drawable/rounder_button"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.056"
                 app:layout_constraintStart_toStartOf="parent"
@@ -131,23 +145,27 @@
 
             <Button
                 android:id="@+id/btn_Upload"
-                android:layout_width="wrap_content"
+                android:layout_width="120dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:layout_marginEnd="110dp"
+                android:background="@drawable/rounder_button"
                 android:text="Upload"
-                app:layout_constraintEnd_toStartOf="@+id/btn_show_uploads"
+                android:textColor="@color/txtColor"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.066"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/progressBar" />
 
             <Button
                 android:id="@+id/btn_show_uploads"
-                android:layout_width="wrap_content"
+                android:layout_width="162dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
+                android:background="@drawable/rounder_button"
                 android:text="Show uploads"
-
+                android:textColor="@color/txtColor"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.86"
                 app:layout_constraintStart_toEndOf="@+id/btn_Upload"
                 app:layout_constraintTop_toBottomOf="@+id/progressBar" />
         </androidx.constraintlayout.widget.ConstraintLayout>

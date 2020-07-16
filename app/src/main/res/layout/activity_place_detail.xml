@@ -50,6 +50,7 @@
                 android:textColor="@color/colorPrimaryDark"
                 android:text="@string/about_this_place"
                 android:textSize="8pt"
+                android:background="@android:color/white"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -58,7 +59,7 @@
             <TextView
                 android:id="@+id/txt_city_detail"
                 android:layout_width="match_parent"
-                android:layout_height="118dp"
+                android:layout_height="129dp"
                 android:elevation="3dp"
                 android:padding="6dp"
                 android:scrollbars="vertical"

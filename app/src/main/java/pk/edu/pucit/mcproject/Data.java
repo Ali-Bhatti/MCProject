@@ -21,7 +21,7 @@ public class Data {
     public static String[] categorys = {"Famous Cities", "Valleys", "Sea View", "Historical Places" , "Desert"};
     public static String[] categoryUrls = {"https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/Faisal_Maseet.JPG/220px-Faisal_Maseet.JPG",
             "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e6/Batura_Glacier.jpg/288px-Batura_Glacier.jpg",
-            "https://upload.wikimedia.org/wikipedia/en/thumb/f/f1/Clifton%2C_Karachi.jpg/256px-Clifton%2C_Karachi.jpg",
+            "https://club.hihonor.com/latin/latin_data/images/2018/12/8/38f205bd01113ff23f2e49ab406b3345.jpg",
             "https://upload.wikimedia.org/wikipedia/commons/9/90/Desert_23.jpg",
             "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/SirkapDoubleHeadedEagleStupa.JPG/1920px-SirkapDoubleHeadedEagleStupa.JPG"};
     public static String[] []famousPlacesOfCites = {

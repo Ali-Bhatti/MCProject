@@ -65,7 +65,7 @@ import static pk.edu.pucit.mcproject.Data.famousPlacesOfCitesUrls;
 import static pk.edu.pucit.mcproject.Home.isConnected;
 
 public class City_details extends AppCompatActivity {
-    public static int IMAGE_DISPLAY_COUNT = 5;
+    public static int IMAGE_DISPLAY_COUNT = 3;
 
 
     private TabLayout viewPagerindicator;

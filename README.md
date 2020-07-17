@@ -6,7 +6,7 @@ Pakistan is one of the top most countries for visitors to visit. This mobile app
 ### See Different Places:
 You can see different places in two different Tags: 
 one is “Famous Places” and other is “Category”.
-A user can also see different cities in Pakistan by clicking on “Cities” under category tag where you can see about city, direction to that city from current location, nearby restaurants and its famous places… Similarly, user can see description of places, nearby restaurants and direction to that places from his/her current location by clicking on that place.
+A user can also see different cities in Pakistan by clicking on “Cities” under category tag where you can see about city, direction to that city from current location, nearby restaurants and its famous places… Similarly, user can see description of places, nearby restaurants and direction to those places from his/her current location by clicking on that place.
 ### Sharing his/her experience:
 User can also share his/her experience with other users by uploading pictures or videos of different places like hill station, cities etc. by clicking on either Upload Image or Upload Video.
 ### Additional Features:

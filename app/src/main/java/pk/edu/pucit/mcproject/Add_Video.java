@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.os.Handler;
+import android.text.Html;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.ArrayAdapter;
@@ -55,7 +56,7 @@ public class Add_Video extends AppCompatActivity {
     private String category;
     private String UserName = "Usman";
     private String UserEmail = "Usman@gmail.com";
-    private EditText PlaceName;
+    private EditText editTextPlaceName;
     private VideoView mVideoView;
     private ProgressBar mProgressBar;
     private Uri Video_uri;
@@ -64,7 +65,6 @@ public class Add_Video extends AppCompatActivity {
     private StorageReference mStorageRef;
     private DatabaseReference mDatabaseRef;
     private StorageTask mUploadTask;
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,7 +102,7 @@ public class Add_Video extends AppCompatActivity {
 
         mButtonChooseVideo =findViewById(R.id.btn_Browse_Video);
         mButtonUpload = findViewById(R.id.btn_Upload);
-        PlaceName = findViewById(R.id.Place_Name);
+        editTextPlaceName = findViewById(R.id.Place_Name);
         mVideoView =findViewById(R.id.VideoView);
         mProgressBar = findViewById(R.id.progressBar);
         aboutPlace = findViewById(R.id.txtWriteSomething);
@@ -114,49 +114,40 @@ public class Add_Video extends AppCompatActivity {
         DatabaseHelper databaseHelper=new DatabaseHelper(getApplicationContext());
         UserName=databaseHelper.getName(UserEmail);
         // mVideoView.setVisibility(View.VISIBLE);
-
         mStorageRef = FirebaseStorage.getInstance().getReference("Videos");
         mDatabaseRef = FirebaseDatabase.getInstance().getReference("Videos");
 
-
-        mButtonChooseVideo.setOnClickListener(new View.OnClickListener() {
+        mButtonChooseVideo.setOnClickListener(v -> Dexter.withContext(getApplicationContext()).withPermission(Manifest.permission.READ_EXTERNAL_STORAGE).withListener(new PermissionListener() {
             @Override
-            public void onClick(View v) {
-                Dexter.withContext(getApplicationContext()).withPermission(Manifest.permission.READ_EXTERNAL_STORAGE).withListener(new PermissionListener() {
-                    @Override
-                    public void onPermissionGranted(PermissionGrantedResponse permissionGrantedResponse) {
-                        openFileChooser();
-                    }
-
-                    @Override
-                    public void onPermissionDenied(PermissionDeniedResponse permissionDeniedResponse) {
-                        Toast.makeText(Add_Video.this, "Storage Read Permission Denied", Toast.LENGTH_SHORT).show();
-                    }
-
-                    @Override
-                    public void onPermissionRationaleShouldBeShown(PermissionRequest permissionRequest, PermissionToken permissionToken) {
-                        permissionToken.continuePermissionRequest();
-                    }
-                }).check();
-
+            public void onPermissionGranted(PermissionGrantedResponse permissionGrantedResponse) {
+                openFileChooser();
             }
+
+            @Override
+            public void onPermissionDenied(PermissionDeniedResponse permissionDeniedResponse) {
+                Toast.makeText(Add_Video.this, "Storage Read Permission Denied", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onPermissionRationaleShouldBeShown(PermissionRequest permissionRequest, PermissionToken permissionToken) {
+                permissionToken.continuePermissionRequest();
+            }
+        }).check());
+
+        mButtonShowUploads.setOnClickListener(v -> {
+            Intent intent = new Intent(getApplicationContext(), show_uploaded_videos.class);
+            startActivity(intent);
         });
 
-        mButtonShowUploads.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), show_uploaded_videos.class);
-                startActivity(intent);
-            }
-        });
-
-        mButtonUpload.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                if(!Home.isConnected(getApplicationContext())){
+        mButtonUpload.setOnClickListener(v -> {
+            String placeName = editTextPlaceName.getText().toString().trim();
+            String categorySelected = Spinner.getSelectedItem().toString();
+            if(placeName.isEmpty() || categorySelected.isEmpty() || categorySelected.equals("--Select--")){
+                Toast.makeText(Add_Video.this, Html.fromHtml("Either <b>Place Name</b> is not written or <b>Category</b> is not selected or <b> both </b> .<br\\> Fill the empty fields"), Toast.LENGTH_SHORT).show();
+            }else {
+                if (!Home.isConnected(getApplicationContext())) {
                     Toast.makeText(Add_Video.this, "Internet Connection Problem.\n Check your Internet Connection.", Toast.LENGTH_SHORT).show();
-                }else {
+                } else {
                     String text = " Upload in progress";
                     if (mUploadTask != null && mUploadTask.isInProgress()) {
                         Toast.makeText(getApplicationContext(), "Upload in progress", Toast.LENGTH_SHORT).show();
@@ -295,7 +286,7 @@ public class Add_Video extends AppCompatActivity {
                                             String fileLink = task.getResult().toString();
                                             //next work with URL
                                             Toast.makeText(getApplicationContext(), "Upload successful", Toast.LENGTH_LONG).show();
-                                            Upload upload = new Upload(PlaceName.getText().toString().trim(),
+                                            Upload upload = new Upload(editTextPlaceName.getText().toString().trim(),
                                                     fileLink, category, UserName, UserEmail, aboutPlace.getText().toString().trim());
 
                                             String uploadId = mDatabaseRef.push().getKey();
@@ -320,7 +311,7 @@ public class Add_Video extends AppCompatActivity {
                         }
                     });
         } else {
-            Toast.makeText(getApplicationContext(), "No file selected", Toast.LENGTH_SHORT).show();
+            Toast.makeText(Add_Video.this, "No file selected", Toast.LENGTH_SHORT).show();
         }
     }
 }

@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.os.Handler;
+import android.text.Html;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.ArrayAdapter;
@@ -52,7 +53,7 @@ public class Add_Image_Fragment extends AppCompatActivity {
     private String category;
     private String UserName ;
     private String UserEmail;
-    private EditText PlaceName;
+    private EditText editTextPlaceName;
     private ImageView mImageView;
     private ProgressBar mProgressBar;
     private Uri Image_uri;
@@ -61,6 +62,7 @@ public class Add_Image_Fragment extends AppCompatActivity {
     private StorageReference mStorageRef;
     private DatabaseReference mDatabaseRef;
     private StorageTask mUploadTask;
+    private String placeName;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -95,7 +97,7 @@ public class Add_Image_Fragment extends AppCompatActivity {
 
         mButtonChooseImage = findViewById(R.id.btn_Browse_Video);
         mButtonUpload = findViewById(R.id.btn_Upload);
-        PlaceName = findViewById(R.id.Place_Name);
+        editTextPlaceName = findViewById(R.id.Place_Name);
         mImageView =findViewById(R.id.imageView);
         mProgressBar =findViewById(R.id.progressBar);
         aboutPlace = findViewById(R.id.txtWriteSomething);
@@ -105,50 +107,43 @@ public class Add_Image_Fragment extends AppCompatActivity {
         UserEmail=sessionManagement.getSession();
         DatabaseHelper databaseHelper=new DatabaseHelper(getApplicationContext());
         UserName=databaseHelper.getName(UserEmail);
-
+        placeName = editTextPlaceName.getText().toString().trim();
 
         mStorageRef = FirebaseStorage.getInstance().getReference("Images");
         mDatabaseRef = FirebaseDatabase.getInstance().getReference("Images");
 
 
-        mButtonChooseImage.setOnClickListener(new View.OnClickListener() {
+        mButtonChooseImage.setOnClickListener(v -> Dexter.withContext(getApplicationContext()).withPermission(Manifest.permission.READ_EXTERNAL_STORAGE).withListener(new PermissionListener() {
             @Override
-            public void onClick(View v) {
-                Dexter.withContext(getApplicationContext()).withPermission(Manifest.permission.READ_EXTERNAL_STORAGE).withListener(new PermissionListener() {
-                    @Override
-                    public void onPermissionGranted(PermissionGrantedResponse permissionGrantedResponse) {
-                        openFileChooser();
-                    }
-
-                    @Override
-                    public void onPermissionDenied(PermissionDeniedResponse permissionDeniedResponse) {
-                        Toast.makeText(Add_Image_Fragment.this, "Storage Read Permission Denied", Toast.LENGTH_SHORT).show();
-                    }
-
-                    @Override
-                    public void onPermissionRationaleShouldBeShown(PermissionRequest permissionRequest, PermissionToken permissionToken) {
-                        permissionToken.continuePermissionRequest();
-                    }
-                }).check();
-
+            public void onPermissionGranted(PermissionGrantedResponse permissionGrantedResponse) {
+                openFileChooser();
             }
+
+            @Override
+            public void onPermissionDenied(PermissionDeniedResponse permissionDeniedResponse) {
+                Toast.makeText(Add_Image_Fragment.this, "Storage Read Permission Denied", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onPermissionRationaleShouldBeShown(PermissionRequest permissionRequest, PermissionToken permissionToken) {
+                permissionToken.continuePermissionRequest();
+            }
+        }).check());
+
+        mButtonShowUploads.setOnClickListener(v -> {
+            Intent intent = new Intent(getApplicationContext(), Show_Uploaded_Images.class);
+            startActivity(intent);
         });
 
-        mButtonShowUploads.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), Show_Uploaded_Images.class);
-                startActivity(intent);
-            }
-        });
-
-
-        mButtonUpload.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(!Home.isConnected(getApplicationContext())){
+        mButtonUpload.setOnClickListener(v -> {
+            String placeName = editTextPlaceName.getText().toString().trim();
+            String categorySelected = Spinner.getSelectedItem().toString();
+            if(placeName.isEmpty() || categorySelected.isEmpty() || categorySelected.equals("--Select--")){
+                Toast.makeText(this, Html.fromHtml("Either <b>Place Name</b> is not written or <b>Category</b> is not selected or <b> Both</b>.<br\\> Fill the empty fields"), Toast.LENGTH_SHORT).show();
+            }else {
+                if (!Home.isConnected(getApplicationContext())) {
                     Toast.makeText(Add_Image_Fragment.this, "Internet Connection Problem.\n Check your Internet Connection.", Toast.LENGTH_SHORT).show();
-                }else {
+                } else {
                     String text = " Upload in progress";
                     if (mUploadTask != null && mUploadTask.isInProgress()) {
                         Toast.makeText(getApplicationContext(), "Upload in progress", Toast.LENGTH_SHORT).show();
@@ -156,10 +151,9 @@ public class Add_Image_Fragment extends AppCompatActivity {
                         uploadFile();
                     }
                 }
-
-
             }
         });
+
     }
 
     /* @Override
@@ -278,7 +272,7 @@ public class Add_Image_Fragment extends AppCompatActivity {
                                             String fileLink = task.getResult().toString();
                                             //next work with URL
                                             Toast.makeText(getApplicationContext(), "Upload successful", Toast.LENGTH_LONG).show();
-                                            Upload upload = new Upload(PlaceName.getText().toString().trim(),
+                                            Upload upload = new Upload(editTextPlaceName.getText().toString().trim(),
                                                   fileLink, category, UserName, UserEmail, aboutPlace.getText().toString().trim());
 
                                             String uploadId = mDatabaseRef.push().getKey();

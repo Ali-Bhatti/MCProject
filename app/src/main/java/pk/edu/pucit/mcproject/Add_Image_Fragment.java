@@ -50,7 +50,7 @@ public class Add_Image_Fragment extends AppCompatActivity {
     private Button mButtonChooseImage;
     private Button mButtonUpload;
     private Button mButtonShowUploads;
-    private String category;
+    private String categorySelected;
     private String UserName ;
     private String UserEmail;
     private EditText editTextPlaceName;
@@ -62,7 +62,7 @@ public class Add_Image_Fragment extends AppCompatActivity {
     private StorageReference mStorageRef;
     private DatabaseReference mDatabaseRef;
     private StorageTask mUploadTask;
-    private String placeName;
+    private Spinner spinner;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -83,17 +83,13 @@ public class Add_Image_Fragment extends AppCompatActivity {
         });
 
         //spinner
-        Spinner Spinner = findViewById(R.id.spinner);
-        // Create an ArrayAdapter using the string array and a default spinner
-        ArrayAdapter<CharSequence> staticAdapter = ArrayAdapter
-                .createFromResource(getApplicationContext(), R.array.category_array,
-                        android.R.layout.simple_spinner_item);
-
-        // Specify the layout to use when the list of choices appears
-        staticAdapter
-                .setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner = findViewById(R.id.spinner);
+        // Create an ArrayAdapter using the string array and a my own spinner i.e., spnr_qualification
+        ArrayAdapter<CharSequence> qual_adapter = ArrayAdapter.createFromResource(this, R.array.category_array,R.layout.spnr_qualification);
+        // Specify the layout to use when the list of choices appears which I made i.e., drpdn_qual
+        qual_adapter.setDropDownViewResource(R.layout.drpdn_qual);
         // Apply the adapter to the spinner
-        Spinner.setAdapter(staticAdapter);
+        spinner.setAdapter(qual_adapter);
 
         mButtonChooseImage = findViewById(R.id.btn_Browse_Video);
         mButtonUpload = findViewById(R.id.btn_Upload);
@@ -102,12 +98,11 @@ public class Add_Image_Fragment extends AppCompatActivity {
         mProgressBar =findViewById(R.id.progressBar);
         aboutPlace = findViewById(R.id.txtWriteSomething);
         mButtonShowUploads = findViewById(R.id.btn_show_uploads);
-        category = Spinner.getSelectedItem().toString();
+        //category = spinner.getSelectedItem().toString();
         SessionManagement sessionManagement=new SessionManagement(getApplicationContext());
         UserEmail=sessionManagement.getSession();
         DatabaseHelper databaseHelper=new DatabaseHelper(getApplicationContext());
         UserName=databaseHelper.getName(UserEmail);
-        placeName = editTextPlaceName.getText().toString().trim();
 
         mStorageRef = FirebaseStorage.getInstance().getReference("Images");
         mDatabaseRef = FirebaseDatabase.getInstance().getReference("Images");
@@ -137,7 +132,7 @@ public class Add_Image_Fragment extends AppCompatActivity {
 
         mButtonUpload.setOnClickListener(v -> {
             String placeName = editTextPlaceName.getText().toString().trim();
-            String categorySelected = Spinner.getSelectedItem().toString();
+            categorySelected = spinner.getSelectedItem().toString();
             if(placeName.isEmpty() || categorySelected.isEmpty() || categorySelected.equals("--Select--")){
                 Toast.makeText(this, Html.fromHtml("Either <b>Place Name</b> is not written or <b>Category</b> is not selected or <b> Both</b>.<br\\> Fill the empty fields"), Toast.LENGTH_SHORT).show();
             }else {
@@ -271,9 +266,9 @@ public class Add_Image_Fragment extends AppCompatActivity {
                                         public void onComplete(@NonNull Task<Uri> task) {
                                             String fileLink = task.getResult().toString();
                                             //next work with URL
-                                            Toast.makeText(getApplicationContext(), "Upload successful", Toast.LENGTH_LONG).show();
+                                            Toast.makeText(Add_Image_Fragment.this, "Upload successful", Toast.LENGTH_LONG).show();
                                             Upload upload = new Upload(editTextPlaceName.getText().toString().trim(),
-                                                  fileLink, category, UserName, UserEmail, aboutPlace.getText().toString().trim());
+                                                  fileLink,categorySelected , UserName, UserEmail, aboutPlace.getText().toString().trim());
 
                                             String uploadId = mDatabaseRef.push().getKey();
                                             mDatabaseRef.child(uploadId).setValue(upload);

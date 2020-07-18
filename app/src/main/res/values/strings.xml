@@ -19,7 +19,7 @@
     <string name="famous_places">Famous Places</string>
     <string name="profile">Profile</string>
     <array name="category_array">
-        <item>--Select--</item>
+        <item></item>
         <item>Hill Station</item>
         <item>Sea View</item>
         <item>Ancient Places</item>

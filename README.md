@@ -14,4 +14,4 @@ User can make account in order to upload videos/images. User can also change his
 
 Thanks to following patterns: 
 - Faraz Maqssod @Faraz31613
-- Usman Ali @UsmanAlii
+- [Usman Ali] (https://github.com/Usman-Alii)
